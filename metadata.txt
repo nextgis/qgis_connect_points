@@ -1,0 +1,20 @@
+[general]
+name=ConnectPoints
+description=Connects the dots between the two layers by link field.
+category=Processing
+version=0.0.8
+qgisMinimumVersion=2.8
+
+author=NextGIS
+email=info@nextgis.org
+
+icon=icons/connect_points.svg
+
+tags=
+
+homepage=
+tracker=
+repository=
+
+experimental=True
+deprecated=False

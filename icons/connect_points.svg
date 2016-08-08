@@ -1,0 +1,18 @@
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+ <title>ring fill</title>
+
+ <metadata id="metadata5697">image/svg+xmlring fill2014-02-04Robert Szczepanekring fillGIS icons 0.2</metadata>
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="26" height="26" id="canvas_background" fill="none"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke="#60c2e5" transform="rotate(-0.005187389440834522 10.655524253883295,10.909993171701016) " stroke-linecap="round" stroke-linejoin="round" id="svg_1" y2="18.299542" x2="17.53988" y1="3.520446" x1="3.771168" fill-opacity="null" stroke-width="2" fill="none"/>
+  <line stroke="#f2bf32" transform="rotate(-92.12155151367188 12.032142639160154,15.094017982482908) " stroke-linecap="round" stroke-linejoin="round" id="svg_5" y2="21.684429" x2="18.130054" y1="8.503607" x1="5.934232" fill-opacity="null" stroke-width="2" fill="none"/>
+  <rect stroke="#666666" id="svg_7" height="2.446418" width="2.439751" y="7.582936" x="17.100093" fill-opacity="null" fill="none"/>
+  <rect stroke="#666666" id="svg_9" height="2.446418" width="2.439751" y="2.332981" x="2.600219" fill-opacity="null" fill="none"/>
+  <rect stroke="#666666" id="svg_10" height="2.446418" width="2.439751" y="19.957828" x="4.7877" fill-opacity="null" fill="none"/>
+  <rect stroke="#666666" id="svg_11" height="2.446418" width="2.439751" y="16.957855" x="16.225101" fill-opacity="null" fill="none"/>
+ </g>
+</svg>
