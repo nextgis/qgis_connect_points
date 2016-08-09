@@ -4,9 +4,9 @@
 #
 # ConnectPoints
 # ---------------------------------------------------------
-# Extended identify tool. Supports displaying and modifying photos
+# Generates lines connecting points from one shape-file to another using common IDs.
 #
-# Copyright (C) 2012-2013 NextGIS (info@nextgis.org)
+# Copyright (C) 2016 NextGIS (info@nextgis.com)
 #
 # This source is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
