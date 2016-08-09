@@ -3,10 +3,15 @@ QGIS plugin to connect two point layers with lines using common ID.
 
 Workflow:
 1. Choose layer FROM
+
 2. Chooser layer TO
+
 3. Choose ID field in layer FROM (for attributing resulting lines)
+
 4. Choose ID field in layer FROM with IDs representing layer TO features
+
 5. Choose ID field in layer TO.
+
 6. Run the tool.
 
 License
