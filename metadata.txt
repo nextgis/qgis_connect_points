@@ -1,20 +1,24 @@
 [general]
 name=ConnectPoints
 description=Connects the dots between the two layers by link field.
+about=QGIS plugin to connect two point layers with lines using common ID. Workflow: 1. Choose layer FROM, 2. Chooser layer TO, 3. Choose ID field in layer FROM (for attributing resulting lines), 4. Choose ID field in layer FROM with IDs representing layer TO features, 5. Choose ID field in layer TO., 6. Run the tool.
 category=Processing
 version=0.0.8
 qgisMinimumVersion=2.8
 
 author=NextGIS
-email=info@nextgis.org
+email=info@nextgis.com
 
 icon=icons/connect_points.svg
+changelog=
+      0.1
+        * Initial release
+      
+tags=vector,points
 
-tags=
-
-homepage=
-tracker=
-repository=
+homepage=https://github.com/nextgis/qgis.connect_points
+tracker=https://github.com/nextgis/qgis.connect_points/issues
+repository=https://github.com/nextgis/qgis.connect_points
 
 experimental=True
 deprecated=False
