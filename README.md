@@ -2,6 +2,7 @@
 QGIS plugin to connect two point layers with lines using common ID.
 
 Workflow:
+
 1. Choose layer FROM
 
 2. Chooser layer TO
