@@ -26,6 +26,8 @@
 #
 #******************************************************************************
 
+import os
+
 from PyQt4 import QtCore
 from PyQt4 import QtGui
 
@@ -33,7 +35,8 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsApplication,
     QgsVectorLayer,
-    QgsMapLayerRegistry
+    QgsMapLayerRegistry,
+    QgsField
 )
 
 from qgis.gui import (
@@ -116,7 +119,7 @@ class ConnectPoints(Plugin):
             settings.value("connect_points_plugin/filed_name_id_from", ""),
             settings.value("connect_points_plugin/filed_name_link", ""),
             settings.value("connect_points_plugin/filed_name_id_to", ""),
-            # settings.value("connect_points_plugin/result_filename", ""),
+            settings.value("connect_points_plugin/result_layer_name", ""),
             self._iface.mainWindow()
         )
         res = dlg.exec_()
@@ -128,7 +131,10 @@ class ConnectPoints(Plugin):
             settings.setValue("connect_points_plugin/filed_name_id_from", plugin_settings[2])
             settings.setValue("connect_points_plugin/filed_name_link", plugin_settings[3])
             settings.setValue("connect_points_plugin/filed_name_id_to", plugin_settings[4])
-            # settings.setValue("connect_points_plugin/result_filename", plugin_settings[5])
+            settings.setValue("connect_points_plugin/result_layer_name", plugin_settings[5])
+
+        dlg.deleteLater()
+        del dlg
 
     def run(self):
         settings = QtCore.QSettings()
@@ -138,6 +144,7 @@ class ConnectPoints(Plugin):
         self.fIdFromName = settings.value("connect_points_plugin/filed_name_id_from", "")
         self.fLinkName = settings.value("connect_points_plugin/filed_name_link", "")
         self.fIdToName = settings.value("connect_points_plugin/filed_name_id_to", "")
+        self.resLayerName = settings.value("connect_points_plugin/result_layer_name", "")
 
         # Plugin().plPrint("self.pointLayerName: %s" % self.pointLayerName)
         # Plugin().plPrint("self.polygonLayerName: %s" % self.polygonLayerName)
@@ -171,7 +178,34 @@ class ConnectPoints(Plugin):
             return
         plTo = plTo_list[0]
 
-        self.resLayer = QgsVectorLayer(u"LineString?crs=EPSG:4326", "result_lines", "memory")
+        layers = QgsMapLayerRegistry.instance().mapLayersByName(self.resLayerName)
+        if len(layers) == 0:
+            if self.resLayerName == "":
+                self.resLayerName = "connect_points_result"
+            else:
+                Plugin().showMessageForUser(
+                    u"Слой с именем '%s' не найден! Создан новый слой!" % self.resLayerName,
+                    QgsMessageBar.WARNING,
+                    0
+                )
+            self.resLayer = QgsVectorLayer(u"LineString?crs=EPSG:4326", self.resLayerName, u"memory")
+        else:
+            if layers[0].providerType() == u"ogr":
+                self.resLayer = QgsVectorLayer(layers[0].source(), self.resLayerName, u"ogr")
+                QgsMapLayerRegistry.instance().removeMapLayers([layers[0].id()])
+            elif layers[0].providerType() == u"memory":
+                self.resLayer = layers[0]
+
+        result = self.addFields(self.resLayer)
+        if result is False:
+            Plugin().showMessageForUser(
+                    u"Слой с именем '%s' не может быть использован для вывода результата!" % self.resLayerName,
+                    QgsMessageBar.WARNING,
+                    0
+            )
+            return
+
+        self.applyResultStyle(self.resLayer)
 
         progressDlg = QgsBusyIndicatorDialog(u"Подготовка")
         progressDlg.setWindowTitle(u"Идёт расчет")
@@ -195,6 +229,50 @@ class ConnectPoints(Plugin):
         self.worker = worker
 
         progressDlg.exec_()
+
+    def addFields(self, qgsMapLayer):
+        self.lineFields = [
+            QgsField(u"PNT1N", QtCore.QVariant.String),
+            QgsField(u"PNT2N", QtCore.QVariant.String),
+            QgsField(u"ID1", QtCore.QVariant.Int),
+            QgsField(u"ID2", QtCore.QVariant.Int),
+        ]
+        self.resLayer.startEditing()
+
+        # provider = qgsMapLayer.dataProvider()
+
+        for need_field in self.lineFields:
+            # for field in qgsMapLayer.fields():
+            #     if field.name() == need_field.name():
+            #         if field.type() == need_field.type():
+            #             continue
+            #         else:
+            #             Plugin().plPrint("field.type(): %d" % field.type())
+            #             Plugin().plPrint("need_field.type(): %d" % need_field.type())
+            #             qgsMapLayer.commitChanges()
+            #             return False
+
+            qgsMapLayer.addAttribute(need_field)
+
+        qgsMapLayer.commitChanges()
+        return True
+
+    def applyResultStyle(self, qgsMapLayer):
+        qgsMapLayer.loadNamedStyle(
+            os.path.join(self.pluginPath, "style.qml")
+        )
+
+        fi = QtCore.QFileInfo(qgsMapLayer.source())
+
+        if not fi.isFile():
+            return
+
+        qgsMapLayer.saveNamedStyle(
+            os.path.join(
+                fi.absolutePath(),
+                fi.baseName() + ".qml"
+            )
+        )
 
     def addLayerToProject(self):
         QgsMapLayerRegistry.instance().addMapLayer(self.resLayer)

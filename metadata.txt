@@ -2,7 +2,7 @@
 name=ConnectPoints
 description=Connects the dots between the two layers by link field.
 category=Processing
-version=0.0.8
+version=0.0.14
 qgisMinimumVersion=2.8
 
 author=NextGIS

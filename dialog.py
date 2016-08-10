@@ -53,13 +53,11 @@ class Dialog(QtGui.QDialog):
             curFNIdFrom,
             curFNLink,
             curFNIdTo,
-            # curResultFilename,
+            curResultLayerName,
             parent=None):
         QtGui.QDialog.__init__(self, parent)
 
         self.resize(500, 200)
-
-        # self.curResultFilename = curResultFilename
 
         self.setWindowTitle(Plugin().getPluginName())
         self.__mainLayout = QtGui.QVBoxLayout(self)
@@ -123,7 +121,16 @@ class Dialog(QtGui.QDialog):
         self.fnIdTo.fieldChanged.connect(self.filedChooze)
         self.__layout.addWidget(self.fnIdTo, 4, 1)
 
-        # self.__layout.addWidget(QtGui.QLabel(u"Результат сохранить в" + ":"), 5, 0)
+        self.__layout.addWidget(QtGui.QLabel(u"Результат сохранить в слой" + ":"), 5, 0)
+        self.linesLayer = QgsMapLayerComboBox()
+        self.linesLayer.setSizePolicy(
+            QtGui.QSizePolicy.Expanding,
+            QtGui.QSizePolicy.Fixed
+        )
+        self.linesLayer.setFilters(QgsMapLayerProxyModel.LineLayer)
+        self.linesLayer.setEditable(True)
+        self.linesLayer.layerChanged.connect(self.choozeResultLayer)
+        self.__layout.addWidget(self.linesLayer, 5, 1)
 
         # self.__layout4resultFileChoose = QtGui.QHBoxLayout()
         # self.leResultFilename = QtGui.QLineEdit(curResultFilename)
@@ -150,7 +157,8 @@ class Dialog(QtGui.QDialog):
             curPointsLayerTo,
             curFNIdFrom,
             curFNLink,
-            curFNIdTo
+            curFNIdTo,
+            curResultLayerName
         )
 
     def fillControls(
@@ -160,22 +168,37 @@ class Dialog(QtGui.QDialog):
         curFNIdFrom,
         curFNLink,
         curFNIdTo,
+        curResultLayerName
     ):
+        Plugin().plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
+        Plugin().plPrint("curPointsLayerTo: " + curPointsLayerTo)
+        Plugin().plPrint("curFNIdFrom: " + curPointsLayerFrom)
+        Plugin().plPrint("curFNLink: " + curFNIdFrom)
+        Plugin().plPrint("curPointsLayerFrom: " + curFNLink)
+        Plugin().plPrint("curFNIdTo: " + curFNIdTo)
+        Plugin().plPrint("curResultLayerName: " + curResultLayerName)
+
         layerFrom = self.getQGISLayer(curPointsLayerFrom)
         layerTo = self.getQGISLayer(curPointsLayerTo)
+        layerResult = self.getQGISLayer(curResultLayerName, True)
 
         if layerFrom is None:
             self.pointsLayerFrom.setCurrentIndex(-1)
             self.pointsLayerFrom.setEditText(curPointsLayerFrom)
-            return
+        else:
+            self.pointsLayerFrom.setLayer(layerFrom)
 
         if layerTo is None:
             self.pointsLayerTo.setCurrentIndex(-1)
             self.pointsLayerTo.setEditText(curPointsLayerTo)
-            return
+        else:
+            self.pointsLayerTo.setLayer(layerTo)
 
-        self.pointsLayerFrom.setLayer(layerFrom)
-        self.pointsLayerTo.setLayer(layerTo)
+        if layerResult is None:
+            self.linesLayer.setCurrentIndex(-1)
+            self.linesLayer.setEditText(curResultLayerName)
+        else:
+            self.linesLayer.setLayer(layerResult)
 
         # self.fnIdFrom.clear()
         # self.fnLink.clear()
@@ -191,14 +214,20 @@ class Dialog(QtGui.QDialog):
         self.fnIdTo.setCurrentIndex(-1)
         self.fnIdTo.setEditText(curFNIdTo)
 
-    def getQGISLayer(self, layerName):
+    def getQGISLayer(self, layerName, silent=False):
+        if layerName is None:
+            return
+        if layerName == "":
+            return
+
         layers = QgsMapLayerRegistry.instance().mapLayersByName(layerName)
         if len(layers) == 0:
-            Plugin().showMessageForUser(
-                u"Слой с именем '%s' не найден!" % layerName,
-                QgsMessageBar.CRITICAL,
-                0
-            )
+            if silent is False:
+                Plugin().showMessageForUser(
+                    u"Слой с именем '%s' не найден!" % layerName,
+                    QgsMessageBar.CRITICAL,
+                    0
+                )
             return None
         return layers[0]
 
@@ -207,6 +236,9 @@ class Dialog(QtGui.QDialog):
 
     def choozeLayerTo(self, qgsMapLayer):
         self.pointsLayerTo.setEditText(qgsMapLayer.name())
+
+    def choozeResultLayer(self, qgsMapLayer):
+        self.linesLayer.setEditText(qgsMapLayer.name())
 
     def filedChooze(self, fieldName):
         self.sender().setEditText(fieldName)
@@ -227,5 +259,5 @@ class Dialog(QtGui.QDialog):
             self.fnIdFrom.currentText(),
             self.fnLink.currentText(),
             self.fnIdTo.currentText(),
-            # self.leResultFilename.text(),
+            self.linesLayer.currentText(),
         ]

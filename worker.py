@@ -57,20 +57,20 @@ class Worker(QtCore.QObject):
 
         self.resLayer = resLayer
 
-        self.lineFields = [
-            QgsField(u"PNT1N", QtCore.QVariant.String),
-            QgsField(u"PNT2N", QtCore.QVariant.String),
-            QgsField(u"ID1", QtCore.QVariant.Int),
-            QgsField(u"ID2", QtCore.QVariant.Int),
-        ]
-
     def run(self):
         self.started.emit()
 
         try:
             self.resLayer.startEditing()
+
+            for feature in self.resLayer.getFeatures():
+                self.resLayer.deleteFeature(feature.id())
+
+            self.resLayer.commitChanges()
+
+            self.resLayer.startEditing()
+
             provider = self.resLayer.dataProvider()
-            provider.addAttributes(self.lineFields)
 
             featureCounter = 0
             featureCount = self.plFrom.featureCount()
