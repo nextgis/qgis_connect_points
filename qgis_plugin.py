@@ -60,14 +60,14 @@ class QgisPlugin(QgisPluginBase):
             self.translator.load(locale_path)
 
             QtCore.QCoreApplication.installTranslator(self.translator)
-        else:
-            self.plPrint(
-                QtCore.QCoreApplication.translate(
-                    "QgisPlugin",
-                    "Translation file %s not found!" % locale_path
-                ),
-                QgsMessageLog.WARNING
-            )
+        # else:
+        #     self.plPrint(
+        #         QtCore.QCoreApplication.translate(
+        #             "QgisPlugin",
+        #             "Translation file %s not found!" % locale_path
+        #         ),
+        #         QgsMessageLog.WARNING
+        #     )
 
     def plPrint(self, msg, level=QgsMessageLog.INFO):
         QgsMessageLog.logMessage(
