@@ -1,6 +1,8 @@
 # qgis.connect_points
 QGIS plugin to connect two point layers with lines using common ID.
 
+![](https://github.com/nextgis/qgis.connect_points/blob/master/docs/example.png?raw=true)
+
 Workflow:
 
 1. Choose layer FROM
