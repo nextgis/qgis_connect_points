@@ -26,7 +26,7 @@
     <message>
         <location filename="plugin.py" line="170"/>
         <source>New layer create!</source>
-        <translation>Создан новый слой!</translation>
+        <translation type="obsolete">Создан новый слой!</translation>
     </message>
     <message>
         <location filename="plugin.py" line="185"/>
@@ -47,6 +47,11 @@
         <location filename="plugin.py" line="209"/>
         <source>Process %d points from %d</source>
         <translation>Обработано %d точек из %d</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="170"/>
+        <source>New layer is created!</source>
+        <translation>Создан новый слой!</translation>
     </message>
 </context>
 <context>

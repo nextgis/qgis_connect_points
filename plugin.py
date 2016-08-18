@@ -165,7 +165,7 @@ class ConnectPoints(QgisPlugin):
                 self.resLayerName = "connect_points_result"
             else:
                 QgisPlugin().showMessageForUser(
-                    self.tr(u"Layer with name '%s' not found!") % self.resLayerName + self.tr("New layer create!"),
+                    self.tr(u"Layer with name '%s' not found!") % self.resLayerName + " " + self.tr("New layer is created!"),
                     QgsMessageBar.WARNING,
                     0
                 )
