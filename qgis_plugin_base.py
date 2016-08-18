@@ -25,15 +25,8 @@
 # MA 02110-1335 USA.
 #
 #*****************************************************************************
-
-from PyQt4 import QtGui
-from qgis.core import (
-    QgsMessageLog,
-)
-
-from qgis.gui import (
-    QgsMessageBar,
-)
+import os
+import ConfigParser
 
 
 class Singleton(type):
@@ -45,49 +38,36 @@ class Singleton(type):
         return cls._instances[Singleton]
 
 
-class Plugin():
+class QgisPluginBase():
     __metaclass__ = Singleton
 
-    def __init__(self, iface, pluginName):
-        self._iface = iface
-        self._name = pluginName
+    def __init__(self):
+        self.__plugin_dir = os.path.dirname(__file__)
+        self.__readMeta()
 
-        self.__actions = []
+    def __readMeta(self):
+        meta_filename = os.path.join(self.__plugin_dir, "metadata.txt")
+        config = ConfigParser.ConfigParser()
+        config.read([meta_filename])
 
-    def plPrint(self, msg, level=QgsMessageLog.INFO):
-        QgsMessageLog.logMessage(
-            msg,
-            self._name,
-            level
-        )
+        self._name = config.get('general', 'name')
+        self._version = config.get('general', 'version')
 
-    def showMessageForUser(self, msg, level=QgsMessageBar.INFO, timeout=2):
-        self._iface.messageBar().pushMessage(
-            self._name,
-            msg,
-            level,
-            timeout
-        )
+    def normalizePluginName(self):
+        return self._name.lower().replace(' ', '_')
 
-    def addAction(self, name, iconSrc, addToToolBar=True, addToMenu=True):
-        action = QtGui.QAction(name, self._iface.mainWindow())
-        action.setIcon(QtGui.QIcon(iconSrc))
+    @property
+    def i18nPath(self):
+        return os.path.join(self.__plugin_dir, "i18n")
 
-        self.__actions.append(action)
-        index = len(self.__actions) - 1
+    @property
+    def pluginDir(self):
+        return self.__plugin_dir
 
-        if addToMenu:
-            self._iface.addPluginToMenu(self._name, self.__actions[index])
-
-        if addToToolBar:
-            self._iface.addToolBarIcon(self.__actions[index])
-
-        return self.__actions[index]
-
-    def delAllActions(self):
-        for action in self.__actions:
-            self._iface.removeToolBarIcon(action)
-            self._iface.removePluginMenu(self._name, action)
-
-    def getPluginName(self):
+    @property
+    def pluginName(self):
         return self._name
+
+    @property
+    def pluginVersion(self):
+        return self._version

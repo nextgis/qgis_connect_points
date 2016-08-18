@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #******************************************************************************
 #
-# ConnectPoints
+# Connect Points
 # ---------------------------------------------------------
 # This plugin convert lesis GIS working dir structure to sqlite data base
 #
@@ -44,40 +44,21 @@ from qgis.gui import (
     QgsMessageBar
 )
 
-from qgis_plugin_base import Plugin
+from qgis_plugin import QgisPlugin
 from dialog import Dialog
 from worker import Worker
 
 
-class ConnectPoints(Plugin):
+class ConnectPoints(QgisPlugin):
     def __init__(self, iface):
-        Plugin.__init__(self, iface, "ConnectPoints")
-
-        userPluginPath = QtCore.QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + '/python/plugins/connect_points'
-        systemPluginPath = QgsApplication.prefixPath() + '/python/plugins/connect_points'
-
-        overrideLocale = QtCore.QSettings().value('locale/overrideFlag', False, type=bool)
-        if not overrideLocale:
-            localeFullName = QtCore.QLocale.system().name()[:2]
-        else:
-            localeFullName = QtCore.QSettings().value("locale/userLocale", "")
-
-        if QtCore.QFileInfo(userPluginPath).exists():
-            translationPath = userPluginPath + '/i18n/connect_points_' + localeFullName + '.qm'
-            self.pluginPath = userPluginPath
-        else:
-            translationPath = systemPluginPath + '/i18n/connect_points_' + localeFullName + '.qm'
-            self.pluginPath = systemPluginPath
-
-        self.localePath = translationPath
-        if QtCore.QFileInfo(self.localePath).exists():
-            self.translator = QtCore.QTranslator()
-            self.translator.load(self.localePath)
-            QgsApplication.installTranslator(self.translator)
+        QgisPlugin.__init__(self, iface)
 
         self.pointLayerName = ""
         self.polygonLayerName = ""
         self.fieldName = ""
+
+    def tr(self, msg):
+        return QtCore.QCoreApplication.translate(self.__class__.__name__, msg)
 
     def initGui(self):
         self.toolButton = QtGui.QToolButton()
@@ -86,16 +67,16 @@ class ConnectPoints(Plugin):
         self.toolBar = self._iface.addToolBarWidget(self.toolButton)
 
         actionRun = self.addAction(
-            u"Перерасчитать",
-            QtGui.QIcon(self.pluginPath + "/icons/connect_points.svg"),
+            self.tr("Recalculate"),
+            QtGui.QIcon(self.pluginDir + "/icons/connect_points.svg"),
             False,
             True,
         )
         actionRun.triggered.connect(self.run)
 
         actionSettings = self.addAction(
-            u"Настройки",
-            QtGui.QIcon(self.pluginPath + "/icons/settings.svg"),
+            self.tr("Settings"),
+            QtGui.QIcon(self.pluginDir + "/icons/settings.svg"),
             False,
             True,
         )
@@ -124,7 +105,7 @@ class ConnectPoints(Plugin):
         )
         res = dlg.exec_()
         if res == Dialog.Accepted:
-            # Plugin().plPrint("Save settings")
+            # QgisPlugin().plPrint("Save settings")
             plugin_settings = dlg.getSettings()
             settings.setValue("connect_points_plugin/point_layer_from", plugin_settings[0])
             settings.setValue("connect_points_plugin/polygin_layer_to", plugin_settings[1])
@@ -146,13 +127,13 @@ class ConnectPoints(Plugin):
         self.fIdToName = settings.value("connect_points_plugin/filed_name_id_to", "")
         self.resLayerName = settings.value("connect_points_plugin/result_layer_name", "")
 
-        # Plugin().plPrint("self.pointLayerName: %s" % self.pointLayerName)
-        # Plugin().plPrint("self.polygonLayerName: %s" % self.polygonLayerName)
-        # Plugin().plPrint("self.fieldName: %s" % self.fieldName)
+        # QgisPlugin().plPrint("self.pointLayerName: %s" % self.pointLayerName)
+        # QgisPlugin().plPrint("self.polygonLayerName: %s" % self.polygonLayerName)
+        # QgisPlugin().plPrint("self.fieldName: %s" % self.fieldName)
 
         if any([v == "" for v in [self.plFromName, self.plToName, self.fIdFromName, self.fLinkName, self.fIdToName]]):
-            Plugin().showMessageForUser(
-                u"Плагин настроен не корректно. Проверте настройки!",
+            QgisPlugin().showMessageForUser(
+                self.tr(u"Plugin settings are incorrect. Please, check settings!"),
                 QgsMessageBar.CRITICAL,
                 0
             )
@@ -160,8 +141,8 @@ class ConnectPoints(Plugin):
 
         plFrom_list = QgsMapLayerRegistry.instance().mapLayersByName(self.plFromName)
         if len(plFrom_list) == 0:
-            Plugin().showMessageForUser(
-                u"Слой с именем '%s' не найден!" % self.plFromName,
+            QgisPlugin().showMessageForUser(
+                self.tr(u"Layer with name '%s' not found!") % self.plFromName,
                 QgsMessageBar.CRITICAL,
                 0
             )
@@ -170,8 +151,8 @@ class ConnectPoints(Plugin):
 
         plTo_list = QgsMapLayerRegistry.instance().mapLayersByName(self.plToName)
         if len(plTo_list) == 0:
-            Plugin().showMessageForUser(
-                u"Слой с именем '%s' не найден!" % self.plToName,
+            QgisPlugin().showMessageForUser(
+                self.tr(u"Layer with name '%s' not found!") % self.plToName,
                 QgsMessageBar.CRITICAL,
                 0
             )
@@ -183,8 +164,8 @@ class ConnectPoints(Plugin):
             if self.resLayerName == "":
                 self.resLayerName = "connect_points_result"
             else:
-                Plugin().showMessageForUser(
-                    u"Слой с именем '%s' не найден! Создан новый слой!" % self.resLayerName,
+                QgisPlugin().showMessageForUser(
+                    self.tr(u"Layer with name '%s' not found!") % self.resLayerName + self.tr("New layer create!"),
                     QgsMessageBar.WARNING,
                     0
                 )
@@ -198,17 +179,17 @@ class ConnectPoints(Plugin):
 
         result = self.addFields(self.resLayer)
         if result is False:
-            Plugin().showMessageForUser(
-                    u"Слой с именем '%s' не может быть использован для вывода результата!" % self.resLayerName,
-                    QgsMessageBar.WARNING,
-                    0
+            QgisPlugin().showMessageForUser(
+                self.tr(u"Layer with name '%s' can not be used for result output!") % self.resLayerName,
+                QgsMessageBar.WARNING,
+                0
             )
             return
 
         self.applyResultStyle(self.resLayer)
 
-        progressDlg = QgsBusyIndicatorDialog(u"Подготовка")
-        progressDlg.setWindowTitle(u"Идёт расчет")
+        progressDlg = QgsBusyIndicatorDialog(self.tr(u"Prepare"))
+        progressDlg.setWindowTitle(self.tr(u"Calculation"))
         worker = Worker(plFrom, plTo, self.fIdFromName, self.fLinkName, self.fIdToName, self.resLayer)
         thread = QtCore.QThread(self._iface.mainWindow())
 
@@ -222,7 +203,11 @@ class ConnectPoints(Plugin):
         worker.stoped.connect(progressDlg.close)
         worker.error.connect(self.showError)
         worker.error.connect(progressDlg.close)
-        worker.progressChanged.connect(lambda x, y: progressDlg.setMessage(u"Обработано %d точек из %d" % (x, y)))
+        worker.progressChanged.connect(
+            lambda x, y: progressDlg.setMessage(
+                self.tr(u"Process %d points from %d") % (x, y)
+            )
+        )
         thread.start()
 
         self.thread = thread
@@ -247,8 +232,8 @@ class ConnectPoints(Plugin):
             #         if field.type() == need_field.type():
             #             continue
             #         else:
-            #             Plugin().plPrint("field.type(): %d" % field.type())
-            #             Plugin().plPrint("need_field.type(): %d" % need_field.type())
+            #             QgisPlugin().plPrint("field.type(): %d" % field.type())
+            #             QgisPlugin().plPrint("need_field.type(): %d" % need_field.type())
             #             qgsMapLayer.commitChanges()
             #             return False
 
@@ -259,7 +244,7 @@ class ConnectPoints(Plugin):
 
     def applyResultStyle(self, qgsMapLayer):
         qgsMapLayer.loadNamedStyle(
-            os.path.join(self.pluginPath, "style.qml")
+            os.path.join(self.pluginDir, "style.qml")
         )
 
         fi = QtCore.QFileInfo(qgsMapLayer.source())
@@ -278,4 +263,4 @@ class ConnectPoints(Plugin):
         QgsMapLayerRegistry.instance().addMapLayer(self.resLayer)
 
     def showError(self, msg):
-        Plugin().showMessageForUser(msg, QgsMessageBar.CRITICAL, 0)
+        QgisPlugin().showMessageForUser(msg, QgsMessageBar.CRITICAL, 0)

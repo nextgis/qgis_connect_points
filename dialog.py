@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #******************************************************************************
 #
-# ConnectPoints
+# Connect Points
 # ---------------------------------------------------------
 # This plugin convert lesis GIS working dir structure to sqlite data base
 #
@@ -41,7 +41,7 @@ from qgis.gui import (
     QgsMessageBar
 )
 
-from qgis_plugin_base import Plugin
+from qgis_plugin import QgisPlugin
 # from worker import Worker
 
 
@@ -59,11 +59,11 @@ class Dialog(QtGui.QDialog):
 
         self.resize(500, 200)
 
-        self.setWindowTitle(Plugin().getPluginName())
+        self.setWindowTitle(QgisPlugin().pluginName)
         self.__mainLayout = QtGui.QVBoxLayout(self)
         self.__layout = QtGui.QGridLayout(self)
 
-        l1 = QtGui.QLabel(u"Точечный слой 'ОТ'" + ":")
+        l1 = QtGui.QLabel(self.tr(u"Point layer 'FROM'") + ":")
         l1.setSizePolicy(
             QtGui.QSizePolicy.Preferred,
             QtGui.QSizePolicy.Fixed
@@ -80,7 +80,7 @@ class Dialog(QtGui.QDialog):
         self.pointsLayerFrom.layerChanged.connect(self.choozeLayerFrom)
         self.__layout.addWidget(self.pointsLayerFrom, 0, 1)
 
-        l2 = QtGui.QLabel(u"Точечный слой 'К'" + ":")
+        l2 = QtGui.QLabel(self.tr(u"Point layer 'TO'") + ":")
         l2.setSizePolicy(
             QtGui.QSizePolicy.Preferred,
             QtGui.QSizePolicy.Fixed
@@ -97,7 +97,10 @@ class Dialog(QtGui.QDialog):
         self.pointsLayerTo.layerChanged.connect(self.choozeLayerTo)
         self.__layout.addWidget(self.pointsLayerTo, 1, 1)
 
-        self.__layout.addWidget(QtGui.QLabel(u"Идентификатор точки 'ОТ'" + ":"), 2, 0)
+        self.__layout.addWidget(
+            QtGui.QLabel(self.tr(u"Point 'FROM' id field name") + ":"),
+            2, 0
+        )
         self.fnIdFrom = QgsFieldComboBox()
         self.fnIdFrom.setFilters(QgsFieldProxyModel.Int | QgsFieldProxyModel.LongLong)
         self.fnIdFrom.setEditable(True)
@@ -105,7 +108,10 @@ class Dialog(QtGui.QDialog):
         self.fnIdFrom.fieldChanged.connect(self.filedChooze)
         self.__layout.addWidget(self.fnIdFrom, 2, 1)
 
-        self.__layout.addWidget(QtGui.QLabel(u"Поле для связи" + ":"), 3, 0)
+        self.__layout.addWidget(
+            QtGui.QLabel(self.tr(u"Link field name") + ":"),
+            3, 0
+        )
         self.fnLink = QgsFieldComboBox()
         self.fnLink.setFilters(QgsFieldProxyModel.Int | QgsFieldProxyModel.LongLong)
         self.fnLink.setEditable(True)
@@ -113,7 +119,8 @@ class Dialog(QtGui.QDialog):
         self.fnLink.fieldChanged.connect(self.filedChooze)
         self.__layout.addWidget(self.fnLink, 3, 1)
 
-        self.__layout.addWidget(QtGui.QLabel(u"Идентификатор точки 'К'" + ":"), 4, 0)
+        self.__layout.addWidget(
+            QtGui.QLabel(self.tr(u"Point 'TO' id field name") + ":"), 4, 0)
         self.fnIdTo = QgsFieldComboBox()
         self.fnIdTo.setFilters(QgsFieldProxyModel.Int | QgsFieldProxyModel.LongLong)
         self.fnIdTo.setEditable(True)
@@ -121,7 +128,10 @@ class Dialog(QtGui.QDialog):
         self.fnIdTo.fieldChanged.connect(self.filedChooze)
         self.__layout.addWidget(self.fnIdTo, 4, 1)
 
-        self.__layout.addWidget(QtGui.QLabel(u"Результат сохранить в слой" + ":"), 5, 0)
+        self.__layout.addWidget(
+            QtGui.QLabel(self.tr(u"Save result in layer") + ":"),
+            5, 0
+        )
         self.linesLayer = QgsMapLayerComboBox()
         self.linesLayer.setSizePolicy(
             QtGui.QSizePolicy.Expanding,
@@ -170,13 +180,13 @@ class Dialog(QtGui.QDialog):
         curFNIdTo,
         curResultLayerName
     ):
-        Plugin().plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
-        Plugin().plPrint("curPointsLayerTo: " + curPointsLayerTo)
-        Plugin().plPrint("curFNIdFrom: " + curPointsLayerFrom)
-        Plugin().plPrint("curFNLink: " + curFNIdFrom)
-        Plugin().plPrint("curPointsLayerFrom: " + curFNLink)
-        Plugin().plPrint("curFNIdTo: " + curFNIdTo)
-        Plugin().plPrint("curResultLayerName: " + curResultLayerName)
+        QgisPlugin().plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
+        QgisPlugin().plPrint("curPointsLayerTo: " + curPointsLayerTo)
+        QgisPlugin().plPrint("curFNIdFrom: " + curPointsLayerFrom)
+        QgisPlugin().plPrint("curFNLink: " + curFNIdFrom)
+        QgisPlugin().plPrint("curPointsLayerFrom: " + curFNLink)
+        QgisPlugin().plPrint("curFNIdTo: " + curFNIdTo)
+        QgisPlugin().plPrint("curResultLayerName: " + curResultLayerName)
 
         layerFrom = self.getQGISLayer(curPointsLayerFrom)
         layerTo = self.getQGISLayer(curPointsLayerTo)
@@ -223,8 +233,8 @@ class Dialog(QtGui.QDialog):
         layers = QgsMapLayerRegistry.instance().mapLayersByName(layerName)
         if len(layers) == 0:
             if silent is False:
-                Plugin().showMessageForUser(
-                    u"Слой с именем '%s' не найден!" % layerName,
+                QgisPlugin().showMessageForUser(
+                    self.tr(u"Layer with name '%s' not found!") % layerName,
                     QgsMessageBar.CRITICAL,
                     0
                 )
@@ -246,7 +256,7 @@ class Dialog(QtGui.QDialog):
     def chooseResultFilename(self):
         filename = QtGui.QFileDialog.getSaveFileName(
             self,
-            u"Выбирите файл для сохранения результата",
+            self.tr(u"Choose file for save result"),
             self.curResultFilename
             # QtCore.QFileInfo(self.curResultFilename).absolutePath()
         )

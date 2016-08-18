@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #******************************************************************************
 #
-# Points2Lines
+# Connect Points
 # ---------------------------------------------------------
 # This plugin convert lesis GIS working dir structure to sqlite data base
 #
@@ -34,7 +34,7 @@ from qgis.core import (
     QgsGeometry,
 )
 
-from qgis_plugin_base import Plugin
+from qgis_plugin import QgisPlugin
 
 
 class Worker(QtCore.QObject):
