@@ -98,7 +98,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.pointsLayerTo, 1, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Point 'FROM' id field name") + ":"),
+            QtGui.QLabel(self.tr(u"Point 'FROM' id field") + ":"),
             2, 0
         )
         self.fnIdFrom = QgsFieldComboBox()
@@ -109,7 +109,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.fnIdFrom, 2, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Link field name") + ":"),
+            QtGui.QLabel(self.tr(u"Link field") + ":"),
             3, 0
         )
         self.fnLink = QgsFieldComboBox()
@@ -120,7 +120,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.fnLink, 3, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Point 'TO' id field name") + ":"), 4, 0)
+            QtGui.QLabel(self.tr(u"Point 'TO' id field") + ":"), 4, 0)
         self.fnIdTo = QgsFieldComboBox()
         self.fnIdTo.setFilters(QgsFieldProxyModel.Int | QgsFieldProxyModel.LongLong)
         self.fnIdTo.setEditable(True)

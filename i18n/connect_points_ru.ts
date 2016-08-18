@@ -6,7 +6,7 @@
     <message>
         <location filename="plugin.py" line="72"/>
         <source>Recalculate</source>
-        <translation>Пересчитать</translation>
+        <translation type="obsolete">Пересчитать</translation>
     </message>
     <message>
         <location filename="plugin.py" line="80"/>
@@ -53,6 +53,11 @@
         <source>New layer is created!</source>
         <translation>Создан новый слой!</translation>
     </message>
+    <message>
+        <location filename="plugin.py" line="72"/>
+        <source>Connect points</source>
+        <translation>Соединить точки</translation>
+    </message>
 </context>
 <context>
     <name>Dialog</name>
@@ -74,17 +79,17 @@
     <message>
         <location filename="dialog.py" line="100"/>
         <source>Point &apos;FROM&apos; id field name</source>
-        <translation>Идентификатор точки &apos;ОТ&apos;</translation>
+        <translation type="obsolete">Идентификатор точки &apos;ОТ&apos;</translation>
     </message>
     <message>
         <location filename="dialog.py" line="111"/>
         <source>Link field name</source>
-        <translation>Поле для связи</translation>
+        <translation type="obsolete">Поле для связи</translation>
     </message>
     <message>
         <location filename="dialog.py" line="122"/>
         <source>Point &apos;TO&apos; id field name</source>
-        <translation>Идентификатор точки &apos;К&apos;</translation>
+        <translation type="obsolete">Идентификатор точки &apos;К&apos;</translation>
     </message>
     <message>
         <location filename="dialog.py" line="131"/>
@@ -100,6 +105,21 @@
         <location filename="dialog.py" line="257"/>
         <source>Choose file for save result</source>
         <translation>Выбирите файл для сохранения результата</translation>
+    </message>
+    <message>
+        <location filename="dialog.py" line="100"/>
+        <source>Point &apos;FROM&apos; id field</source>
+        <translation>Идентификатор точки &apos;ОТ&apos;</translation>
+    </message>
+    <message>
+        <location filename="dialog.py" line="111"/>
+        <source>Link field</source>
+        <translation>Поле для связи</translation>
+    </message>
+    <message>
+        <location filename="dialog.py" line="122"/>
+        <source>Point &apos;TO&apos; id field</source>
+        <translation>Идентификатор точки &apos;К&apos;</translation>
     </message>
 </context>
 </TS>

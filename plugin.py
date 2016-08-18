@@ -67,7 +67,7 @@ class ConnectPoints(QgisPlugin):
         self.toolBar = self._iface.addToolBarWidget(self.toolButton)
 
         actionRun = self.addAction(
-            self.tr("Recalculate"),
+            self.tr("Connect points"),
             QtGui.QIcon(self.pluginDir + "/icons/connect_points.svg"),
             False,
             True,
