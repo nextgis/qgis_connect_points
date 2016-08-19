@@ -169,13 +169,22 @@ class ConnectPoints(QgisPlugin):
                     QgsMessageBar.WARNING,
                     0
                 )
-            self.resLayer = QgsVectorLayer(u"LineString?crs=EPSG:4326", self.resLayerName, u"memory")
+            self.resLayer = QgsVectorLayer(
+                u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
+                self.resLayerName,
+                u"memory"
+            )
         else:
             if layers[0].providerType() == u"ogr":
                 self.resLayer = QgsVectorLayer(layers[0].source(), self.resLayerName, u"ogr")
                 QgsMapLayerRegistry.instance().removeMapLayers([layers[0].id()])
             elif layers[0].providerType() == u"memory":
-                self.resLayer = layers[0]
+                QgsMapLayerRegistry.instance().removeMapLayers([layers[0].id()])
+                self.resLayer = QgsVectorLayer(
+                    u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
+                    self.resLayerName,
+                    u"memory"
+                )
 
         result = self.addFields(self.resLayer)
         if result is False:
@@ -261,6 +270,7 @@ class ConnectPoints(QgisPlugin):
 
     def addLayerToProject(self):
         QgsMapLayerRegistry.instance().addMapLayer(self.resLayer)
+        self._iface.mapCanvas().updateOverview()
 
     def showError(self, msg):
         QgisPlugin().showMessageForUser(msg, QgsMessageBar.CRITICAL, 0)

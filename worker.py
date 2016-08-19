@@ -32,6 +32,7 @@ from qgis.core import (
     QgsField,
     QgsFeatureRequest,
     QgsGeometry,
+    QgsCoordinateTransform,
 )
 
 from qgis_plugin import QgisPlugin
@@ -72,6 +73,9 @@ class Worker(QtCore.QObject):
 
             provider = self.resLayer.dataProvider()
 
+            from_transform = QgsCoordinateTransform(self.plFrom.crs(), self.resLayer.crs())
+            to_transform = QgsCoordinateTransform(self.plTo.crs(), self.resLayer.crs())
+
             featureCounter = 0
             featureCount = self.plFrom.featureCount()
             for featureFrom in self.plFrom.getFeatures():
@@ -82,10 +86,15 @@ class Worker(QtCore.QObject):
                     if forignKey == primaryKey:
                         # Plugin().plPrint("feature: %d - %d" % (forignKey, primaryKey))
                         lineFeature = QgsFeature()
+
+                        f = featureFrom.geometry()
+                        f.transform(from_transform)
+                        t = featureTo.geometry()
+                        t.transform(to_transform)
                         lineFeature.setGeometry(
                             QgsGeometry.fromPolyline([
-                                featureFrom.geometry().asPoint(),
-                                featureTo.geometry().asPoint(),
+                                f.asPoint(),
+                                t.asPoint(),
                             ])
                         )
                         lineFeature.setAttributes(
