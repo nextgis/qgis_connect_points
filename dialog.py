@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#******************************************************************************
+# ******************************************************************************
 #
 # Connect Points
 # ---------------------------------------------------------
@@ -24,28 +24,27 @@
 # to the Free Software Foundation, 51 Franklin Street, Suite 500 Boston,
 # MA 02110-1335 USA.
 #
-#******************************************************************************
+# ******************************************************************************
 
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from qgis.core import (
-    QgsMapLayerRegistry,
+    QgsProject,
+    QgsMapLayerProxyModel,
+    QgsFieldProxyModel,
+    Qgis,
+    QgsVectorLayer
 )
 
 from qgis.gui import (
     QgsMapLayerComboBox,
-    QgsMapLayerProxyModel,
     QgsFieldComboBox,
-    QgsFieldProxyModel,
-    QgsMessageBar
 )
 
-from qgis_plugin import QgisPlugin
-# from worker import Worker
+from .qgis_plugin import QgisPlugin
 
-
-class Dialog(QtGui.QDialog):
+class Dialog(QtWidgets.QDialog):
     def __init__(
             self,
             curPointsLayerFrom,
@@ -55,24 +54,24 @@ class Dialog(QtGui.QDialog):
             curFNIdTo,
             curResultLayerName,
             parent=None):
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         self.resize(500, 200)
 
-        self.setWindowTitle(QgisPlugin().pluginName)
-        self.__mainLayout = QtGui.QVBoxLayout(self)
-        self.__layout = QtGui.QGridLayout(self)
+        self.setWindowTitle(QgisPlugin(iface=parent).pluginName)
+        self.__mainLayout = QtWidgets.QVBoxLayout(self)
+        self.__layout = QtWidgets.QGridLayout(self)
 
-        l1 = QtGui.QLabel(self.tr(u"Point layer 'FROM'") + ":")
+        l1 = QtWidgets.QLabel(self.tr(u"Point layer 'FROM'") + ":")
         l1.setSizePolicy(
-            QtGui.QSizePolicy.Preferred,
-            QtGui.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Fixed
         )
         self.__layout.addWidget(l1, 0, 0)
         self.pointsLayerFrom = QgsMapLayerComboBox()
         self.pointsLayerFrom.setSizePolicy(
-            QtGui.QSizePolicy.Expanding,
-            QtGui.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Fixed
         )
         self.pointsLayerFrom.setFilters(QgsMapLayerProxyModel.PointLayer)
         self.pointsLayerFrom.setEditable(True)
@@ -80,16 +79,16 @@ class Dialog(QtGui.QDialog):
         self.pointsLayerFrom.layerChanged.connect(self.choozeLayerFrom)
         self.__layout.addWidget(self.pointsLayerFrom, 0, 1)
 
-        l2 = QtGui.QLabel(self.tr(u"Point layer 'TO'") + ":")
+        l2 = QtWidgets.QLabel(self.tr(u"Point layer 'TO'") + ":")
         l2.setSizePolicy(
-            QtGui.QSizePolicy.Preferred,
-            QtGui.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Fixed
         )
         self.__layout.addWidget(l2, 1, 0)
         self.pointsLayerTo = QgsMapLayerComboBox()
         self.pointsLayerTo.setSizePolicy(
-            QtGui.QSizePolicy.Expanding,
-            QtGui.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Fixed
         )
         self.pointsLayerTo.setFilters(QgsMapLayerProxyModel.PointLayer)
         self.pointsLayerTo.setEditable(True)
@@ -98,7 +97,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.pointsLayerTo, 1, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Point 'FROM' id field") + ":"),
+            QtWidgets.QLabel(self.tr(u"Point 'FROM' id field") + ":"),
             2, 0
         )
         self.fnIdFrom = QgsFieldComboBox()
@@ -109,7 +108,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.fnIdFrom, 2, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Link field") + ":"),
+            QtWidgets.QLabel(self.tr(u"Link field") + ":"),
             3, 0
         )
         self.fnLink = QgsFieldComboBox()
@@ -120,7 +119,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.fnLink, 3, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Point 'TO' id field") + ":"), 4, 0)
+            QtWidgets.QLabel(self.tr(u"Point 'TO' id field") + ":"), 4, 0)
         self.fnIdTo = QgsFieldComboBox()
         self.fnIdTo.setFilters(QgsFieldProxyModel.Int | QgsFieldProxyModel.LongLong)
         self.fnIdTo.setEditable(True)
@@ -129,13 +128,13 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.fnIdTo, 4, 1)
 
         self.__layout.addWidget(
-            QtGui.QLabel(self.tr(u"Save result in layer") + ":"),
+            QtWidgets.QLabel(self.tr(u"Save result in layer") + ":"),
             5, 0
         )
         self.linesLayer = QgsMapLayerComboBox()
         self.linesLayer.setSizePolicy(
-            QtGui.QSizePolicy.Expanding,
-            QtGui.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Fixed
         )
         self.linesLayer.setFilters(QgsMapLayerProxyModel.LineLayer)
         self.linesLayer.setEditable(True)
@@ -143,7 +142,7 @@ class Dialog(QtGui.QDialog):
         self.__layout.addWidget(self.linesLayer, 5, 1)
 
         # self.__layout4resultFileChoose = QtGui.QHBoxLayout()
-        # self.leResultFilename = QtGui.QLineEdit(curResultFilename)
+        # self.leResultFilename = QtWidgets.QLineEdit(curResultFilename)
         # self.__layout4resultFileChoose.addWidget(self.leResultFilename)
         # self.pbChooseResultFilename = QtGui.QPushButton(u"Выбрать")
         # self.pbChooseResultFilename.released.connect(self.chooseResultFilename)
@@ -157,8 +156,8 @@ class Dialog(QtGui.QDialog):
 
         self.__mainLayout.addLayout(self.__layout)
 
-        self.__bbox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok)
-        self.__bbox.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        self.__bbox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
+        self.__bbox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.__bbox.accepted.connect(self.accept)
         self.__mainLayout.addWidget(self.__bbox)
 
@@ -172,21 +171,21 @@ class Dialog(QtGui.QDialog):
         )
 
     def fillControls(
-        self,
-        curPointsLayerFrom,
-        curPointsLayerTo,
-        curFNIdFrom,
-        curFNLink,
-        curFNIdTo,
-        curResultLayerName
+            self,
+            curPointsLayerFrom,
+            curPointsLayerTo,
+            curFNIdFrom,
+            curFNLink,
+            curFNIdTo,
+            curResultLayerName
     ):
-        QgisPlugin().plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
-        QgisPlugin().plPrint("curPointsLayerTo: " + curPointsLayerTo)
-        QgisPlugin().plPrint("curFNIdFrom: " + curPointsLayerFrom)
-        QgisPlugin().plPrint("curFNLink: " + curFNIdFrom)
-        QgisPlugin().plPrint("curPointsLayerFrom: " + curFNLink)
-        QgisPlugin().plPrint("curFNIdTo: " + curFNIdTo)
-        QgisPlugin().plPrint("curResultLayerName: " + curResultLayerName)
+        QgisPlugin(iface=self.parent).plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
+        QgisPlugin(iface=self.parent).plPrint("curPointsLayerTo: " + curPointsLayerTo)
+        QgisPlugin(iface=self.parent).plPrint("curFNIdFrom: " + curPointsLayerFrom)
+        QgisPlugin(iface=self.parent).plPrint("curFNLink: " + curFNIdFrom)
+        QgisPlugin(iface=self.parent).plPrint("curPointsLayerFrom: " + curFNLink)
+        QgisPlugin(iface=self.parent).plPrint("curFNIdTo: " + curFNIdTo)
+        QgisPlugin(iface=self.parent).plPrint("curResultLayerName: " + curResultLayerName)
 
         layerFrom = self.getQGISLayer(curPointsLayerFrom)
         layerTo = self.getQGISLayer(curPointsLayerTo)
@@ -230,31 +229,34 @@ class Dialog(QtGui.QDialog):
         if layerName == "":
             return
 
-        layers = QgsMapLayerRegistry.instance().mapLayersByName(layerName)
+        layers = QgsProject.instance().mapLayersByName(layerName)
         if len(layers) == 0:
             if silent is False:
-                QgisPlugin().showMessageForUser(
+                QgisPlugin(iface=self.parent).showMessageForUser(
                     self.tr(u"Layer with name '%s' not found!") % layerName,
-                    QgsMessageBar.CRITICAL,
+                    Qgis.Critical,
                     0
                 )
             return None
         return layers[0]
 
     def choozeLayerFrom(self, qgsMapLayer):
-        self.pointsLayerFrom.setEditText(qgsMapLayer.name())
+        if isinstance(qgsMapLayer, QgsVectorLayer):
+            self.pointsLayerFrom.setEditText(qgsMapLayer.name())
 
     def choozeLayerTo(self, qgsMapLayer):
-        self.pointsLayerTo.setEditText(qgsMapLayer.name())
+        if isinstance(qgsMapLayer, QgsVectorLayer):
+            self.pointsLayerTo.setEditText(qgsMapLayer.name())
 
     def choozeResultLayer(self, qgsMapLayer):
-        self.linesLayer.setEditText(qgsMapLayer.name())
+        if isinstance(qgsMapLayer, QgsVectorLayer):
+            self.linesLayer.setEditText(qgsMapLayer.name())
 
     def filedChooze(self, fieldName):
         self.sender().setEditText(fieldName)
 
     def chooseResultFilename(self):
-        filename = QtGui.QFileDialog.getSaveFileName(
+        filename = QtWidgets.QFileDialog.getSaveFileName(
             self,
             self.tr(u"Choose file for save result"),
             self.curResultFilename

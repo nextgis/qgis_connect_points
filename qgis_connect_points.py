@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#******************************************************************************
+# ******************************************************************************
 #
 # Connect Points
 # ---------------------------------------------------------
@@ -24,29 +24,27 @@
 # to the Free Software Foundation, 51 Franklin Street, Suite 500 Boston,
 # MA 02110-1335 USA.
 #
-#******************************************************************************
+# ******************************************************************************
 
 import os
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui, QtWidgets
 
 from qgis.core import (
-    QgsMapLayerRegistry,
-    QgsApplication,
+    QgsProject,
     QgsVectorLayer,
-    QgsMapLayerRegistry,
-    QgsField
+    QgsField,
+    Qgis,
 )
 
 from qgis.gui import (
     QgsBusyIndicatorDialog,
-    QgsMessageBar
 )
 
-from qgis_plugin import QgisPlugin
-from dialog import Dialog
-from worker import Worker
+from .qgis_plugin import QgisPlugin
+from .dialog import Dialog
+from .worker import Worker
 
 
 class ConnectPoints(QgisPlugin):
@@ -61,9 +59,9 @@ class ConnectPoints(QgisPlugin):
         return QtCore.QCoreApplication.translate(self.__class__.__name__, msg)
 
     def initGui(self):
-        self.toolButton = QtGui.QToolButton()
-        self.toolButton.setMenu(QtGui.QMenu())
-        self.toolButton.setPopupMode(QtGui.QToolButton.MenuButtonPopup)
+        self.toolButton = QtWidgets.QToolButton()
+        self.toolButton.setMenu(QtWidgets.QMenu())
+        self.toolButton.setPopupMode(QtWidgets.QToolButton.MenuButtonPopup)
         self.toolBar = self._iface.addToolBarWidget(self.toolButton)
 
         actionRun = self.addAction(
@@ -92,30 +90,37 @@ class ConnectPoints(QgisPlugin):
         self._iface.removeToolBarIcon(self.toolBar)
 
     def showSettings(self):
-        settings = QtCore.QSettings()
+        if len(QgsProject.instance().mapLayers()):
+            settings = QtCore.QSettings()
 
-        dlg = Dialog(
-            settings.value("connect_points_plugin/point_layer_from", ""),
-            settings.value("connect_points_plugin/polygin_layer_to", ""),
-            settings.value("connect_points_plugin/filed_name_id_from", ""),
-            settings.value("connect_points_plugin/filed_name_link", ""),
-            settings.value("connect_points_plugin/filed_name_id_to", ""),
-            settings.value("connect_points_plugin/result_layer_name", ""),
-            self._iface.mainWindow()
-        )
-        res = dlg.exec_()
-        if res == Dialog.Accepted:
-            # QgisPlugin().plPrint("Save settings")
-            plugin_settings = dlg.getSettings()
-            settings.setValue("connect_points_plugin/point_layer_from", plugin_settings[0])
-            settings.setValue("connect_points_plugin/polygin_layer_to", plugin_settings[1])
-            settings.setValue("connect_points_plugin/filed_name_id_from", plugin_settings[2])
-            settings.setValue("connect_points_plugin/filed_name_link", plugin_settings[3])
-            settings.setValue("connect_points_plugin/filed_name_id_to", plugin_settings[4])
-            settings.setValue("connect_points_plugin/result_layer_name", plugin_settings[5])
+            dlg = Dialog(
+                settings.value("connect_points_plugin/point_layer_from", ""),
+                settings.value("connect_points_plugin/polygin_layer_to", ""),
+                settings.value("connect_points_plugin/filed_name_id_from", ""),
+                settings.value("connect_points_plugin/filed_name_link", ""),
+                settings.value("connect_points_plugin/filed_name_id_to", ""),
+                settings.value("connect_points_plugin/result_layer_name", ""),
+                self._iface.mainWindow()
+            )
+            res = dlg.exec_()
+            if res == Dialog.Accepted:
+                # QgisPlugin().plPrint("Save settings")
+                plugin_settings = dlg.getSettings()
+                settings.setValue("connect_points_plugin/point_layer_from", plugin_settings[0])
+                settings.setValue("connect_points_plugin/polygin_layer_to", plugin_settings[1])
+                settings.setValue("connect_points_plugin/filed_name_id_from", plugin_settings[2])
+                settings.setValue("connect_points_plugin/filed_name_link", plugin_settings[3])
+                settings.setValue("connect_points_plugin/filed_name_id_to", plugin_settings[4])
+                settings.setValue("connect_points_plugin/result_layer_name", plugin_settings[5])
 
-        dlg.deleteLater()
-        del dlg
+            dlg.deleteLater()
+            del dlg
+        else:
+            QgisPlugin(iface=self._iface).showMessageForUser(
+                self.tr(u"There are no available vector layers in layer tree!"),
+                Qgis.Critical,
+                0
+            )
 
     def run(self):
         settings = QtCore.QSettings()
@@ -132,41 +137,42 @@ class ConnectPoints(QgisPlugin):
         # QgisPlugin().plPrint("self.fieldName: %s" % self.fieldName)
 
         if any([v == "" for v in [self.plFromName, self.plToName, self.fIdFromName, self.fLinkName, self.fIdToName]]):
-            QgisPlugin().showMessageForUser(
+            QgisPlugin(iface=self._iface).showMessageForUser(
                 self.tr(u"Plugin settings are incorrect. Please, check settings!"),
-                QgsMessageBar.CRITICAL,
+                Qgis.Critical,
                 0
             )
             return
 
-        plFrom_list = QgsMapLayerRegistry.instance().mapLayersByName(self.plFromName)
+        plFrom_list = QgsProject.instance().mapLayersByName(self.plFromName)
         if len(plFrom_list) == 0:
-            QgisPlugin().showMessageForUser(
+            QgisPlugin(iface=self._iface).showMessageForUser(
                 self.tr(u"Layer with name '%s' not found!") % self.plFromName,
-                QgsMessageBar.CRITICAL,
+                Qgis.Critical,
                 0
             )
             return
         plFrom = plFrom_list[0]
 
-        plTo_list = QgsMapLayerRegistry.instance().mapLayersByName(self.plToName)
+        plTo_list = QgsProject.instance().mapLayersByName(self.plToName)
         if len(plTo_list) == 0:
-            QgisPlugin().showMessageForUser(
+            QgisPlugin(iface=self._iface).showMessageForUser(
                 self.tr(u"Layer with name '%s' not found!") % self.plToName,
-                QgsMessageBar.CRITICAL,
+                Qgis.Critical,
                 0
             )
             return
         plTo = plTo_list[0]
 
-        layers = QgsMapLayerRegistry.instance().mapLayersByName(self.resLayerName)
+        layers = QgsProject.instance().mapLayersByName(self.resLayerName)
         if len(layers) == 0:
             if self.resLayerName == "":
                 self.resLayerName = "connect_points_result"
             else:
-                QgisPlugin().showMessageForUser(
-                    self.tr(u"Layer with name '%s' not found!") % self.resLayerName + " " + self.tr("New layer is created!"),
-                    QgsMessageBar.WARNING,
+                QgisPlugin(iface=self._iface).showMessageForUser(
+                    self.tr(u"Layer with name '%s' not found!") % self.resLayerName + " " + self.tr(
+                        "New layer is created!"),
+                    Qgis.Warning,
                     0
                 )
             self.resLayer = QgsVectorLayer(
@@ -177,9 +183,9 @@ class ConnectPoints(QgisPlugin):
         else:
             if layers[0].providerType() == u"ogr":
                 self.resLayer = QgsVectorLayer(layers[0].source(), self.resLayerName, u"ogr")
-                QgsMapLayerRegistry.instance().removeMapLayers([layers[0].id()])
+                QgsProject.instance().removeMapLayers([layers[0].id()])
             elif layers[0].providerType() == u"memory":
-                QgsMapLayerRegistry.instance().removeMapLayers([layers[0].id()])
+                QgsProject.instance().removeMapLayers([layers[0].id()])
                 self.resLayer = QgsVectorLayer(
                     u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
                     self.resLayerName,
@@ -188,9 +194,9 @@ class ConnectPoints(QgisPlugin):
 
         result = self.addFields(self.resLayer)
         if result is False:
-            QgisPlugin().showMessageForUser(
+            QgisPlugin(iface=self._iface).showMessageForUser(
                 self.tr(u"Layer with name '%s' can not be used for result output!") % self.resLayerName,
-                QgsMessageBar.WARNING,
+                Qgis.Warning,
                 0
             )
             return
@@ -269,8 +275,9 @@ class ConnectPoints(QgisPlugin):
         )
 
     def addLayerToProject(self):
-        QgsMapLayerRegistry.instance().addMapLayer(self.resLayer)
-        self._iface.mapCanvas().updateOverview()
+        QgsProject.instance().addMapLayer(self.resLayer)
+        self.resLayer.triggerRepaint()
+        # self._iface.mapCanvas().updateOverview()
 
     def showError(self, msg):
-        QgisPlugin().showMessageForUser(msg, QgsMessageBar.CRITICAL, 0)
+        QgisPlugin(iface=self._iface).showMessageForUser(msg, Qgis.Critical, 0)

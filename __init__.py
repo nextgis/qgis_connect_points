@@ -27,5 +27,5 @@
 
 
 def classFactory(iface):
-    from plugin import ConnectPoints
+    from .qgis_connect_points import ConnectPoints
     return ConnectPoints(iface)

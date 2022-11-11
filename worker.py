@@ -25,17 +25,16 @@
 # MA 02110-1335 USA.
 #
 #******************************************************************************
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 
 from qgis.core import (
     QgsFeature,
-    QgsField,
-    QgsFeatureRequest,
     QgsGeometry,
     QgsCoordinateTransform,
+    QgsProject,
 )
 
-from qgis_plugin import QgisPlugin
+from .qgis_plugin import QgisPlugin
 
 
 class Worker(QtCore.QObject):
@@ -73,8 +72,10 @@ class Worker(QtCore.QObject):
 
             provider = self.resLayer.dataProvider()
 
-            from_transform = QgsCoordinateTransform(self.plFrom.crs(), self.resLayer.crs())
-            to_transform = QgsCoordinateTransform(self.plTo.crs(), self.resLayer.crs())
+            # print(f'{self.plFrom.crs()=}', f'{self.plTo.crs()=}')
+
+            from_transform = QgsCoordinateTransform(self.plFrom.crs(), self.resLayer.crs(), QgsProject.instance())
+            to_transform = QgsCoordinateTransform(self.plTo.crs(), self.resLayer.crs(), QgsProject.instance())
 
             featureCounter = 0
             featureCount = self.plFrom.featureCount()
@@ -92,7 +93,7 @@ class Worker(QtCore.QObject):
                         t = featureTo.geometry()
                         t.transform(to_transform)
                         lineFeature.setGeometry(
-                            QgsGeometry.fromPolyline([
+                            QgsGeometry.fromPolylineXY([
                                 f.asPoint(),
                                 t.asPoint(),
                             ])
