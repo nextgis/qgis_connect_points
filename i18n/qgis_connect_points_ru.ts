@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru">
 <context>
     <name>ConnectPoints</name>
     <message>
-        <location filename="plugin.py" line="72"/>
+        <location filename="qgis_connect_points.py" line="72"/>
         <source>Recalculate</source>
         <translation type="obsolete">Пересчитать</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="80"/>
+        <location filename="qgis_connect_points.py" line="78"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="qgis_connect_points.py" line="170"/>
         <source>Layer with name &apos;%s&apos; not found!</source>
         <translation>Слой с именем &apos;%s&apos; не найден!</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="138"/>
+        <location filename="qgis_connect_points.py" line="138"/>
         <source>Plugin settings are incorrect. Please, check settings!</source>
         <translation>Плагин настроен не корректно. Проверте настройки!</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="qgis_connect_points.py" line="170"/>
         <source>New layer create!</source>
         <translation type="obsolete">Создан новый слой!</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="185"/>
+        <location filename="qgis_connect_points.py" line="185"/>
         <source>Layer with name &apos;%s&apos; can not be used for result output!</source>
         <translation>Слой с именем &apos;%s&apos; не может быть использован для вывода результата!</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="194"/>
+        <location filename="qgis_connect_points.py" line="194"/>
         <source>Prepare</source>
         <translation>Подготовка</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="195"/>
+        <location filename="qgis_connect_points.py" line="195"/>
         <source>Calculation</source>
         <translation>Идёт расчет</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="209"/>
+        <location filename="qgis_connect_points.py" line="209"/>
         <source>Process %d points from %d</source>
         <translation>Обработано %d точек из %d</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="qgis_connect_points.py" line="170"/>
         <source>New layer is created!</source>
         <translation>Создан новый слой!</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="72"/>
+        <location filename="qgis_connect_points.py" line="72"/>
         <source>Connect points</source>
         <translation>Соединить точки</translation>
     </message>

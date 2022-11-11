@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#******************************************************************************
+# ******************************************************************************
 #
 # qgis_plugin
 # ---------------------------------------------------------
@@ -24,20 +24,22 @@
 # to the Free Software Foundation, 51 Franklin Street, Suite 500 Boston,
 # MA 02110-1335 USA.
 #
-#*****************************************************************************
+# *****************************************************************************
 import os
 
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtCore
 
 from qgis.core import (
     QgsMessageLog,
+    Qgis,
 )
-from qgis.gui import (
-    QgsMessageBar,
+from qgis.PyQt.QtWidgets import (
+    QAction,
 )
 
-from qgis_plugin_base import QgisPluginBase
+
+from .qgis_plugin_base import QgisPluginBase
 
 
 class QgisPlugin(QgisPluginBase):
@@ -69,14 +71,14 @@ class QgisPlugin(QgisPluginBase):
         #         QgsMessageLog.WARNING
         #     )
 
-    def plPrint(self, msg, level=QgsMessageLog.INFO):
+    def plPrint(self, msg, level=Qgis.Info):
         QgsMessageLog.logMessage(
             msg,
             self._name,
             level
         )
 
-    def showMessageForUser(self, msg, level=QgsMessageBar.INFO, timeout=2):
+    def showMessageForUser(self, msg, level=Qgis.Info, timeout=2):
         self._iface.messageBar().pushMessage(
             self._name,
             msg,
@@ -85,7 +87,7 @@ class QgisPlugin(QgisPluginBase):
         )
 
     def addAction(self, name, iconSrc, addToToolBar=True, addToMenu=True):
-        action = QtGui.QAction(name, self._iface.mainWindow())
+        action = QAction(name, self._iface.mainWindow())
         action.setIcon(QtGui.QIcon(iconSrc))
 
         self.__actions.append(action)

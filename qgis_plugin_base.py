@@ -26,7 +26,7 @@
 #
 #*****************************************************************************
 import os
-import ConfigParser
+import configparser
 
 
 class Singleton(type):
@@ -47,7 +47,7 @@ class QgisPluginBase():
 
     def __readMeta(self):
         meta_filename = os.path.join(self.__plugin_dir, "metadata.txt")
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read([meta_filename])
 
         self._name = config.get('general', 'name')
