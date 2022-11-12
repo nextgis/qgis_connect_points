@@ -1,5 +1,5 @@
-# qgis.connect_points
-QGIS plugin to connect two point layers with lines using common ID.
+# Connect_points
+QGIS plugin to connect two point layers with lines using common IDs.
 
 ![](https://github.com/nextgis/qgis.connect_points/blob/master/docs/example.png?raw=true)
 
@@ -25,4 +25,4 @@ Commercial support
 ----------
 Need to fix a bug or add a feature to ConnectPoints? We provide custom development and support for this software. [Contact us](http://nextgis.com/contact/) to discuss options!
 
-[![http://nextgis.com](http://nextgis.ru/img/nextgis.png)](http://nextgis.com)
+[![https://nextgis.com](https://nextgis.com/img/nextgis.png)](https://nextgis.com)
