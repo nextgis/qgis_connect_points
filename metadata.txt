@@ -1,7 +1,7 @@
 [general]
 name=Connect Points
-description=Connects the dots between the two layers using a link field.
-about=Create lines connecting two point layers using common IDs. Workflow: 1. Choose layer FROM, 2. Chooser layer TO, 3. Choose ID field in layer FROM (for attributing resulting lines), 4. Choose ID field in layer FROM with IDs representing layer TO features, 5. Choose ID field in layer TO., 6. Run the tool.
+description=Connects the dots between the two layers using a link field
+about=Create lines connecting two point layers using common IDs. Developed by NextGIS. Any feedback is welcome at https://nextgis.com/contact
 category=Processing
 version=0.2
 qgisMinimumVersion=3.0
