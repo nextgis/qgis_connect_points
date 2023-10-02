@@ -1,7 +1,9 @@
 [general]
 name=Connect Points
-description=Connects the dots between the two layers using a link field
-about=Create lines connecting two point layers using common IDs. Developed by NextGIS. Any feedback is welcome at https://nextgis.com/contact
+description=Connects the dots between the two layers using a link field.
+description[ru]=Соединяет точки между двумя слоями с помощью поля ссылки.
+about=Create lines connecting two point layers using common IDs. Workflow: 1. Choose layer FROM, 2. Chooser layer TO, 3. Choose ID field in layer FROM (for attributing resulting lines), 4. Choose ID field in layer FROM with IDs representing layer TO features, 5. Choose ID field in layer TO., 6. Run the tool.
+about[ru]=Создайте линии, соединяющие два слоя точек, используя общие идентификаторы. Рабочий процесс: 1. Выберите слой ИЗ, 2. Выберите слой ДО, 3. Выберите поле идентификатора в слое ОТ (для атрибутирования результирующих линий), 4. Выберите поле идентификатора в слое ОТ с идентификаторами, представляющими объекты слоя ДО, 5. Выберите поле идентификатора в слое ОТ слой ТО., 6. Запустите инструмент.
 category=Processing
 version=0.2
 qgisMinimumVersion=3.0
@@ -16,12 +18,14 @@ changelog=
         * QGIS 3 port
       0.1
         * Initial release
-      
+
 tags=vector,points
 
 homepage=https://github.com/nextgis/qgis_connect_points
 tracker=https://github.com/nextgis/qgis_connect_points/issues
 repository=https://github.com/nextgis/qgis_connect_points
+video=https://youtu.be/enD5z4mwsfg
+video[ru]=https://youtu.be/eOkudqHMeFc
 
 experimental=False
 deprecated=False

@@ -27,15 +27,18 @@
 # ******************************************************************************
 
 import os
+from os import path
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui, QtWidgets
+from qgis.PyQt.QtCore import QTranslator, QCoreApplication
 
 from qgis.core import (
     QgsProject,
     QgsVectorLayer,
     QgsField,
     Qgis,
+    QgsApplication,
 )
 
 from qgis.gui import (
@@ -45,11 +48,15 @@ from qgis.gui import (
 from .qgis_plugin import QgisPlugin
 from .dialog import Dialog
 from .worker import Worker
+from . import  about_dialog
 
 
 class ConnectPoints(QgisPlugin):
     def __init__(self, iface):
         QgisPlugin.__init__(self, iface)
+        self.plugin_dir = path.dirname(__file__)
+        self._translator = None
+        self.__init_translator()
 
         self.pointLayerName = ""
         self.polygonLayerName = ""
@@ -80,10 +87,23 @@ class ConnectPoints(QgisPlugin):
         )
         actionSettings.triggered.connect(self.showSettings)
 
+        actionAbout = self.addAction(
+            self.tr("About"),
+            None,
+            False,
+            True,
+        )
+        actionAbout.triggered.connect(self.about)
+
         m = self.toolButton.menu()
         m.addAction(actionRun)
         m.addAction(actionSettings)
+        m.addAction(actionAbout)
         self.toolButton.setDefaultAction(actionRun)
+
+    def about(self):
+        dialog = about_dialog.AboutDialog(os.path.basename(self.plugin_dir))
+        dialog.exec_()
 
     def unload(self):
         self.delAllActions()
@@ -281,3 +301,20 @@ class ConnectPoints(QgisPlugin):
 
     def showError(self, msg):
         QgisPlugin(iface=self._iface).showMessageForUser(msg, Qgis.Critical, 0)
+
+    def __init_translator(self):
+        # initialize locale
+        locale = QgsApplication.instance().locale()
+
+        def add_translator(locale_path):
+            if not path.exists(locale_path):
+                return
+            translator = QTranslator()
+            translator.load(locale_path)
+            QCoreApplication.installTranslator(translator)
+            self._translator = translator  # Should be kept in memory
+
+        add_translator(path.join(
+            self.plugin_dir, 'i18n',
+            'connect_points_{}.qm'.format(locale)
+        ))
