@@ -17,12 +17,17 @@ Workflow:
 
 6. Run the tool.
 
-License
--------------
+
+## YouTube
+
+[![enD5z4mwsfg](https://github.com/nextgis/qgis_connect_points/assets/14816075/e13426f5-551f-4181-b711-7264b1abbb51)](https://youtu.be/enD5z4mwsfg)
+
+## License
+
 This program is licensed under GNU GPL v2 or any later version
 
-Commercial support
-----------
+## Commercial support
+
 Need to fix a bug or add a feature to ConnectPoints? 
 
 We provide custom development and support for this software. [Contact us](https://nextgis.com/contact/) to discuss options!
