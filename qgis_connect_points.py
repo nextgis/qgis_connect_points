@@ -120,6 +120,7 @@ class ConnectPoints(QgisPlugin):
                 settings.value("connect_points_plugin/filed_name_link", ""),
                 settings.value("connect_points_plugin/filed_name_id_to", ""),
                 settings.value("connect_points_plugin/result_layer_name", ""),
+                self._iface,
                 self._iface.mainWindow()
             )
             res = dlg.exec_()
