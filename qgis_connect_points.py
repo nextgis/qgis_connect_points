@@ -88,7 +88,7 @@ class ConnectPoints(QgisPlugin):
         actionSettings.triggered.connect(self.showSettings)
 
         actionAbout = self.addAction(
-            self.tr("About"),
+            self.tr("About plugin…"),
             None,
             False,
             True,
