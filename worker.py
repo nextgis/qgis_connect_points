@@ -34,8 +34,6 @@ from qgis.core import (
     QgsProject,
 )
 
-from .qgis_plugin import QgisPlugin
-
 
 class Worker(QtCore.QObject):
 

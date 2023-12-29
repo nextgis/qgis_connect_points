@@ -53,12 +53,15 @@ class Dialog(QtWidgets.QDialog):
             curFNLink,
             curFNIdTo,
             curResultLayerName,
+            iface,
             parent=None):
         QtWidgets.QDialog.__init__(self, parent)
 
+        self._iface = iface
+
         self.resize(500, 200)
 
-        self.setWindowTitle(QgisPlugin(iface=parent).pluginName)
+        self.setWindowTitle(QgisPlugin(self._iface).pluginName)
         self.__mainLayout = QtWidgets.QVBoxLayout(self)
         self.__layout = QtWidgets.QGridLayout(self)
 
@@ -179,13 +182,13 @@ class Dialog(QtWidgets.QDialog):
             curFNIdTo,
             curResultLayerName
     ):
-        QgisPlugin(iface=self.parent).plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
-        QgisPlugin(iface=self.parent).plPrint("curPointsLayerTo: " + curPointsLayerTo)
-        QgisPlugin(iface=self.parent).plPrint("curFNIdFrom: " + curPointsLayerFrom)
-        QgisPlugin(iface=self.parent).plPrint("curFNLink: " + curFNIdFrom)
-        QgisPlugin(iface=self.parent).plPrint("curPointsLayerFrom: " + curFNLink)
-        QgisPlugin(iface=self.parent).plPrint("curFNIdTo: " + curFNIdTo)
-        QgisPlugin(iface=self.parent).plPrint("curResultLayerName: " + curResultLayerName)
+        QgisPlugin(self._iface).plPrint("curPointsLayerFrom: " + curPointsLayerFrom)
+        QgisPlugin(self._iface).plPrint("curPointsLayerTo: " + curPointsLayerTo)
+        QgisPlugin(self._iface).plPrint("curFNIdFrom: " + curPointsLayerFrom)
+        QgisPlugin(self._iface).plPrint("curFNLink: " + curFNIdFrom)
+        QgisPlugin(self._iface).plPrint("curPointsLayerFrom: " + curFNLink)
+        QgisPlugin(self._iface).plPrint("curFNIdTo: " + curFNIdTo)
+        QgisPlugin(self._iface).plPrint("curResultLayerName: " + curResultLayerName)
 
         layerFrom = self.getQGISLayer(curPointsLayerFrom)
         layerTo = self.getQGISLayer(curPointsLayerTo)
@@ -232,7 +235,7 @@ class Dialog(QtWidgets.QDialog):
         layers = QgsProject.instance().mapLayersByName(layerName)
         if len(layers) == 0:
             if silent is False:
-                QgisPlugin(iface=self.parent).showMessageForUser(
+                QgisPlugin(self._iface).showMessageForUser(
                     self.tr(u"Layer with name '%s' not found!") % layerName,
                     Qgis.Critical,
                     0

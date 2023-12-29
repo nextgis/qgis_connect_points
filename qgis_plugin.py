@@ -34,6 +34,7 @@ from qgis.core import (
     QgsMessageLog,
     Qgis,
 )
+from qgis.gui import QgisInterface
 from qgis.PyQt.QtWidgets import (
     QAction,
 )
@@ -43,7 +44,7 @@ from .qgis_plugin_base import QgisPluginBase
 
 
 class QgisPlugin(QgisPluginBase):
-    def __init__(self, iface):
+    def __init__(self, iface: QgisInterface):
         QgisPluginBase.__init__(self)
 
         self._iface = iface
@@ -71,15 +72,17 @@ class QgisPlugin(QgisPluginBase):
         #         QgsMessageLog.WARNING
         #     )
 
-    def plPrint(self, msg, level=Qgis.Info):
+    def plPrint(self, msg, level=Qgis.MessageLevel.Info):
         QgsMessageLog.logMessage(
             msg,
             self._name,
             level
         )
 
-    def showMessageForUser(self, msg, level=Qgis.Info, timeout=2):
-        self._iface.messageBar().pushMessage(
+    def showMessageForUser(self, msg, level=Qgis.MessageLevel.Info, timeout=2):
+        message_bar = self._iface.messageBar()
+        assert message_bar is not None
+        message_bar.pushMessage(
             self._name,
             msg,
             level,
