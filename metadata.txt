@@ -14,6 +14,9 @@ email=info@nextgis.com
 
 icon=icons/connect_points.svg
 changelog=
+      0.3
+        * Added about dialog
+        * Bug fixed
       0.2
         * QGIS 3 port
       0.1
