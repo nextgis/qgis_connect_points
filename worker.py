@@ -31,7 +31,7 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsCoordinateTransform,
-    QgsProject,
+    QgsProject
 )
 
 
@@ -91,9 +91,9 @@ class Worker(QtCore.QObject):
                         t = featureTo.geometry()
                         t.transform(to_transform)
                         lineFeature.setGeometry(
-                            QgsGeometry.fromPolylineXY([
-                                f.asPoint(),
-                                t.asPoint(),
+                            QgsGeometry.fromPolyline([
+                                f.constGet(),
+                                t.constGet(),
                             ])
                         )
                         lineFeature.setAttributes(

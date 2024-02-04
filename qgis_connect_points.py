@@ -197,7 +197,7 @@ class ConnectPoints(QgisPlugin):
                     0
                 )
             self.resLayer = QgsVectorLayer(
-                u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
+                u"LineStringZ?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
                 self.resLayerName,
                 u"memory"
             )
@@ -208,7 +208,7 @@ class ConnectPoints(QgisPlugin):
             elif layers[0].providerType() == u"memory":
                 QgsProject.instance().removeMapLayers([layers[0].id()])
                 self.resLayer = QgsVectorLayer(
-                    u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
+                    u"LineStringZ?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
                     self.resLayerName,
                     u"memory"
                 )
