@@ -90,11 +90,11 @@ class Worker(QtCore.QObject):
                         f.transform(from_transform)
                         t = featureTo.geometry()
                         t.transform(to_transform)
+
                         lineFeature.setGeometry(
-                            QgsGeometry.fromPolyline([
-                                f.constGet(),
-                                t.constGet(),
-                            ])
+                            QgsGeometry.fromPolyline(
+                                [ f.constGet(), t.constGet() ]
+                                )
                         )
                         lineFeature.setAttributes(
                             [
