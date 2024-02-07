@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #******************************************************************************
 #
 # Connect Points
@@ -25,14 +24,18 @@
 # MA 02110-1335 USA.
 #
 #******************************************************************************
-from PyQt5 import QtCore
+
+from qgis.PyQt import QtCore
 
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsCoordinateTransform,
-    QgsProject
+    QgsProject,
+    QgsVectorLayer,
+    QgsWkbTypes
 )
+
 
 
 class Worker(QtCore.QObject):
@@ -40,9 +43,17 @@ class Worker(QtCore.QObject):
     started = QtCore.pyqtSignal()
     stoped = QtCore.pyqtSignal()
     progressChanged = QtCore.pyqtSignal(int, int)
-    error = QtCore.pyqtSignal(unicode)
+    error = QtCore.pyqtSignal(str)
 
-    def __init__(self, plFrom, plTo, fIdFromName, fLinkName, fIdToName, resLayer):
+    def __init__(
+        self,
+        plFrom: QgsVectorLayer,
+        plTo: QgsVectorLayer,
+        fIdFromName,
+        fLinkName,
+        fIdToName,
+        resLayer
+    ) -> None:
         QtCore.QObject.__init__(self)
 
         # Plugin().plPrint("Worker __init__")
@@ -84,33 +95,45 @@ class Worker(QtCore.QObject):
                     primaryKey = featureTo.attribute(self.fIdToName)
                     if forignKey == primaryKey:
                         # Plugin().plPrint("feature: %d - %d" % (forignKey, primaryKey))
+
+                        from_geometry: QgsGeometry = featureFrom.geometry()
+                        from_geometry.transform(from_transform)
+                        to_geometry: QgsGeometry = featureTo.geometry()
+                        to_geometry.transform(to_transform)
+
+                        point_from = from_geometry.vertexAt(0)
+                        point_to = to_geometry.vertexAt(0)
+
+                        if (
+                            QgsWkbTypes.hasZ(point_to.wkbType())
+                            and not QgsWkbTypes.hasZ(point_from.wkbType())
+                        ):
+                            point_from.addZValue()
+
+                        if (
+                            QgsWkbTypes.hasZ(point_from.wkbType())
+                            and not QgsWkbTypes.hasZ(point_to.wkbType())
+                        ):
+                            point_to.addZValue()
+
                         lineFeature = QgsFeature()
-
-                        f = featureFrom.geometry()
-                        f.transform(from_transform)
-                        t = featureTo.geometry()
-                        t.transform(to_transform)
-
                         lineFeature.setGeometry(
-                            QgsGeometry.fromPolyline(
-                                [ f.constGet(), t.constGet() ]
-                                )
+                            QgsGeometry.fromPolyline([point_from, point_to])
                         )
-                        lineFeature.setAttributes(
-                            [
-                                self.plFrom.name(),
-                                self.plTo.name(),
-                                featureFrom.attribute(self.fIdFromName),
-                                primaryKey
-                            ]
-                        )
+                        lineFeature.setAttributes([
+                            self.plFrom.name(),
+                            self.plTo.name(),
+                            featureFrom.attribute(self.fIdFromName),
+                            primaryKey
+                        ])
 
                         provider.addFeatures([lineFeature])
+
                 featureCounter += 1
             self.stoped.emit()
         except KeyError as e:
-            self.error.emit(u"There is no attribute with name: " + unicode(e))
+            self.error.emit(u"There is no attribute with name: " + str(e))
         except Exception as e:
-            self.error.emit(unicode(e))
+            self.error.emit(str(e))
         finally:
             self.resLayer.commitChanges()
