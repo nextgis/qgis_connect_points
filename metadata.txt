@@ -5,7 +5,7 @@ description[ru]=Соединяет точки между двумя слоями
 about=Create lines connecting two point layers using common IDs. Workflow: 1. Choose layer FROM, 2. Chooser layer TO, 3. Choose ID field in layer FROM (for attributing resulting lines), 4. Choose ID field in layer FROM with IDs representing layer TO features, 5. Choose ID field in layer TO., 6. Run the tool.
 about[ru]=Создайте линии, соединяющие два слоя точек, используя общие идентификаторы. Рабочий процесс: 1. Выберите слой ИЗ, 2. Выберите слой ДО, 3. Выберите поле идентификатора в слое ОТ (для атрибутирования результирующих линий), 4. Выберите поле идентификатора в слое ОТ с идентификаторами, представляющими объекты слоя ДО, 5. Выберите поле идентификатора в слое ОТ слой ТО., 6. Запустите инструмент.
 category=Processing
-version=0.3
+version=0.4
 qgisMinimumVersion=3.0
 qgisMaximumVersion=3.99
 
@@ -14,6 +14,8 @@ email=info@nextgis.com
 
 icon=icons/connect_points.svg
 changelog=
+      0.4
+        * Added support for layers with z-dimension
       0.3
         * Added about dialog
         * Bug fixed
