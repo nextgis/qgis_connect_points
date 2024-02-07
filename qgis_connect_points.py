@@ -185,6 +185,11 @@ class ConnectPoints(QgisPlugin):
             return
         plTo = plTo_list[0]
 
+        resType = "LineString"
+        if (plTo.wkbType() == Qgis.WkbType.PointZ or
+            plFrom.wkbType() == Qgis.WkbType.PointZ):
+            resType = f"{resType}Z"
+
         layers = QgsProject.instance().mapLayersByName(self.resLayerName)
         if len(layers) == 0:
             if self.resLayerName == "":
@@ -196,21 +201,22 @@ class ConnectPoints(QgisPlugin):
                     Qgis.Warning,
                     0
                 )
+
             self.resLayer = QgsVectorLayer(
-                u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
+                f"{resType}?crs={self._iface.mapCanvas().mapSettings().destinationCrs().authid()}",
                 self.resLayerName,
-                u"memory"
+                "memory"
             )
         else:
             if layers[0].providerType() == u"ogr":
-                self.resLayer = QgsVectorLayer(layers[0].source(), self.resLayerName, u"ogr")
+                self.resLayer = QgsVectorLayer(layers[0].source(), self.resLayerName, "ogr")
                 QgsProject.instance().removeMapLayers([layers[0].id()])
             elif layers[0].providerType() == u"memory":
                 QgsProject.instance().removeMapLayers([layers[0].id()])
                 self.resLayer = QgsVectorLayer(
-                    u"LineString?crs=%s" % self._iface.mapCanvas().mapSettings().destinationCrs().authid(),
+                    f"{resType}?crs={self._iface.mapCanvas().mapSettings().destinationCrs().authid()}",
                     self.resLayerName,
-                    u"memory"
+                    "memory"
                 )
 
         result = self.addFields(self.resLayer)
