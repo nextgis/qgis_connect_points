@@ -53,9 +53,9 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="193"/>
+        <location filename="../qgis_connect_points.py" line="198"/>
         <source>Layer with name &apos;%s&apos; not found!</source>
-        <translation>Слой с именем &apos;%s&apos; не найден!</translation>
+        <translation>Слой с именем '%s' не найден!</translation>
     </message>
     <message>
         <location filename="../qgis_connect_points.py" line="161"/>
@@ -63,27 +63,27 @@
         <translation>Плагин настроен не корректно. Проверте настройки!</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="218"/>
+        <location filename="../qgis_connect_points.py" line="224"/>
         <source>Layer with name &apos;%s&apos; can not be used for result output!</source>
-        <translation>Слой с именем &apos;%s&apos; не может быть использован для вывода результата!</translation>
+        <translation>Слой с именем '%s' не может быть использован для вывода результата!</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="227"/>
+        <location filename="../qgis_connect_points.py" line="233"/>
         <source>Prepare</source>
         <translation>Подготовка</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="228"/>
+        <location filename="../qgis_connect_points.py" line="234"/>
         <source>Calculation</source>
         <translation>Идёт расчет</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="242"/>
+        <location filename="../qgis_connect_points.py" line="248"/>
         <source>Process %d points from %d</source>
         <translation>Обработано %d точек из %d</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="193"/>
+        <location filename="../qgis_connect_points.py" line="198"/>
         <source>New layer is created!</source>
         <translation>Создан новый слой!</translation>
     </message>
@@ -108,12 +108,12 @@
     <message>
         <location filename="../dialog.py" line="68"/>
         <source>Point layer &apos;FROM&apos;</source>
-        <translation>Точечный слой &apos;ОТ&apos;</translation>
+        <translation>Точечный слой 'ОТ'</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="85"/>
         <source>Point layer &apos;TO&apos;</source>
-        <translation>Точечный слой &apos;К&apos;</translation>
+        <translation>Точечный слой 'К'</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="133"/>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../dialog.py" line="238"/>
         <source>Layer with name &apos;%s&apos; not found!</source>
-        <translation>Слой с именем &apos;%s&apos; не найден!</translation>
+        <translation>Слой с именем '%s' не найден!</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="262"/>
@@ -133,7 +133,7 @@
     <message>
         <location filename="../dialog.py" line="102"/>
         <source>Point &apos;FROM&apos; id field</source>
-        <translation>Идентификатор точки &apos;ОТ&apos;</translation>
+        <translation>Идентификатор точки 'ОТ'</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="113"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../dialog.py" line="124"/>
         <source>Point &apos;TO&apos; id field</source>
-        <translation>Идентификатор точки &apos;К&apos;</translation>
+        <translation>Идентификатор точки 'К'</translation>
     </message>
 </context>
 </TS>
