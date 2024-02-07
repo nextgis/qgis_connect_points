@@ -29,8 +29,8 @@
 import os
 from os import path
 
-from PyQt5 import QtCore
-from PyQt5 import QtGui, QtWidgets
+from qgis.PyQt import QtCore
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QTranslator, QCoreApplication
 
 from qgis.core import (
@@ -39,6 +39,7 @@ from qgis.core import (
     QgsField,
     Qgis,
     QgsApplication,
+    QgsWkbTypes
 )
 
 from qgis.gui import (
@@ -186,8 +187,10 @@ class ConnectPoints(QgisPlugin):
         plTo = plTo_list[0]
 
         resType = "LineString"
-        if (plTo.wkbType() == Qgis.WkbType.PointZ or
-            plFrom.wkbType() == Qgis.WkbType.PointZ):
+        if (
+            QgsWkbTypes.hasZ(plTo.wkbType())
+            or QgsWkbTypes.hasZ(plFrom.wkbType())
+        ):
             resType = f"{resType}Z"
 
         layers = QgsProject.instance().mapLayersByName(self.resLayerName)
