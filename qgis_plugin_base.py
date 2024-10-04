@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#******************************************************************************
+# ******************************************************************************
 #
 # qgis_plugin_base
 # ---------------------------------------------------------
@@ -24,7 +24,7 @@
 # to the Free Software Foundation, 51 Franklin Street, Suite 500 Boston,
 # MA 02110-1335 USA.
 #
-#*****************************************************************************
+# *****************************************************************************
 import os
 import configparser
 
@@ -34,11 +34,13 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         if Singleton not in cls._instances:
-            cls._instances[Singleton] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[Singleton] = super(Singleton, cls).__call__(
+                *args, **kwargs
+            )
         return cls._instances[Singleton]
 
 
-class QgisPluginBase():
+class QgisPluginBase:
     __metaclass__ = Singleton
 
     def __init__(self):
@@ -50,11 +52,11 @@ class QgisPluginBase():
         config = configparser.ConfigParser()
         config.read([meta_filename])
 
-        self._name = config.get('general', 'name')
-        self._version = config.get('general', 'version')
+        self._name = config.get("general", "name")
+        self._version = config.get("general", "version")
 
     def normalizePluginName(self):
-        return self._name.lower().replace(' ', '_')
+        return self._name.lower().replace(" ", "_")
 
     @property
     def i18nPath(self):

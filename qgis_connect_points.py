@@ -39,7 +39,7 @@ from qgis.core import (
     QgsField,
     Qgis,
     QgsApplication,
-    QgsWkbTypes
+    QgsWkbTypes,
 )
 
 from qgis.gui import (
@@ -49,7 +49,7 @@ from qgis.gui import (
 from .qgis_plugin import QgisPlugin
 from .dialog import Dialog
 from .worker import Worker
-from . import  about_dialog
+from . import about_dialog
 
 
 class ConnectPoints(QgisPlugin):
@@ -122,56 +122,98 @@ class ConnectPoints(QgisPlugin):
                 settings.value("connect_points_plugin/filed_name_id_to", ""),
                 settings.value("connect_points_plugin/result_layer_name", ""),
                 self._iface,
-                self._iface.mainWindow()
+                self._iface.mainWindow(),
             )
             res = dlg.exec_()
             if res == Dialog.Accepted:
                 # QgisPlugin().plPrint("Save settings")
                 plugin_settings = dlg.getSettings()
-                settings.setValue("connect_points_plugin/point_layer_from", plugin_settings[0])
-                settings.setValue("connect_points_plugin/polygin_layer_to", plugin_settings[1])
-                settings.setValue("connect_points_plugin/filed_name_id_from", plugin_settings[2])
-                settings.setValue("connect_points_plugin/filed_name_link", plugin_settings[3])
-                settings.setValue("connect_points_plugin/filed_name_id_to", plugin_settings[4])
-                settings.setValue("connect_points_plugin/result_layer_name", plugin_settings[5])
+                settings.setValue(
+                    "connect_points_plugin/point_layer_from",
+                    plugin_settings[0],
+                )
+                settings.setValue(
+                    "connect_points_plugin/polygin_layer_to",
+                    plugin_settings[1],
+                )
+                settings.setValue(
+                    "connect_points_plugin/filed_name_id_from",
+                    plugin_settings[2],
+                )
+                settings.setValue(
+                    "connect_points_plugin/filed_name_link", plugin_settings[3]
+                )
+                settings.setValue(
+                    "connect_points_plugin/filed_name_id_to",
+                    plugin_settings[4],
+                )
+                settings.setValue(
+                    "connect_points_plugin/result_layer_name",
+                    plugin_settings[5],
+                )
 
             dlg.deleteLater()
             del dlg
         else:
             QgisPlugin(iface=self._iface).showMessageForUser(
-                self.tr(u"There are no available vector layers in layer tree!"),
+                self.tr("There are no available vector layers in layer tree!"),
                 Qgis.Critical,
-                0
+                0,
             )
 
     def run(self):
         settings = QtCore.QSettings()
 
-        self.plFromName = settings.value("connect_points_plugin/point_layer_from", "")
-        self.plToName = settings.value("connect_points_plugin/polygin_layer_to", "")
-        self.fIdFromName = settings.value("connect_points_plugin/filed_name_id_from", "")
-        self.fLinkName = settings.value("connect_points_plugin/filed_name_link", "")
-        self.fIdToName = settings.value("connect_points_plugin/filed_name_id_to", "")
-        self.resLayerName = settings.value("connect_points_plugin/result_layer_name", "")
+        self.plFromName = settings.value(
+            "connect_points_plugin/point_layer_from", ""
+        )
+        self.plToName = settings.value(
+            "connect_points_plugin/polygin_layer_to", ""
+        )
+        self.fIdFromName = settings.value(
+            "connect_points_plugin/filed_name_id_from", ""
+        )
+        self.fLinkName = settings.value(
+            "connect_points_plugin/filed_name_link", ""
+        )
+        self.fIdToName = settings.value(
+            "connect_points_plugin/filed_name_id_to", ""
+        )
+        self.resLayerName = settings.value(
+            "connect_points_plugin/result_layer_name", ""
+        )
 
         # QgisPlugin().plPrint("self.pointLayerName: %s" % self.pointLayerName)
         # QgisPlugin().plPrint("self.polygonLayerName: %s" % self.polygonLayerName)
         # QgisPlugin().plPrint("self.fieldName: %s" % self.fieldName)
 
-        if any([v == "" for v in [self.plFromName, self.plToName, self.fIdFromName, self.fLinkName, self.fIdToName]]):
+        if any(
+            [
+                v == ""
+                for v in [
+                    self.plFromName,
+                    self.plToName,
+                    self.fIdFromName,
+                    self.fLinkName,
+                    self.fIdToName,
+                ]
+            ]
+        ):
             QgisPlugin(iface=self._iface).showMessageForUser(
-                self.tr(u"Plugin settings are incorrect. Please, check settings!"),
+                self.tr(
+                    "Plugin settings are incorrect. Please, check settings!"
+                ),
                 Qgis.Critical,
-                0
+                0,
             )
             return
 
         plFrom_list = QgsProject.instance().mapLayersByName(self.plFromName)
         if len(plFrom_list) == 0:
             QgisPlugin(iface=self._iface).showMessageForUser(
-                self.tr(u"Layer with name '%s' not found!") % self.plFromName,
+                self.tr("Layer with name '%s' not found!") % self.plFromName,
                 Qgis.Critical,
-                0
+                0,
             )
             return
         plFrom = plFrom_list[0]
@@ -179,17 +221,16 @@ class ConnectPoints(QgisPlugin):
         plTo_list = QgsProject.instance().mapLayersByName(self.plToName)
         if len(plTo_list) == 0:
             QgisPlugin(iface=self._iface).showMessageForUser(
-                self.tr(u"Layer with name '%s' not found!") % self.plToName,
+                self.tr("Layer with name '%s' not found!") % self.plToName,
                 Qgis.Critical,
-                0
+                0,
             )
             return
         plTo = plTo_list[0]
 
         resType = "LineString"
-        if (
-            QgsWkbTypes.hasZ(plTo.wkbType())
-            or QgsWkbTypes.hasZ(plFrom.wkbType())
+        if QgsWkbTypes.hasZ(plTo.wkbType()) or QgsWkbTypes.hasZ(
+            plFrom.wkbType()
         ):
             resType = f"{resType}Z"
 
@@ -199,43 +240,57 @@ class ConnectPoints(QgisPlugin):
                 self.resLayerName = "connect_points_result"
             else:
                 QgisPlugin(iface=self._iface).showMessageForUser(
-                    self.tr(u"Layer with name '%s' not found!") % self.resLayerName + " " + self.tr(
-                        "New layer is created!"),
+                    self.tr("Layer with name '%s' not found!")
+                    % self.resLayerName
+                    + " "
+                    + self.tr("New layer is created!"),
                     Qgis.Warning,
-                    0
+                    0,
                 )
 
             self.resLayer = QgsVectorLayer(
                 f"{resType}?crs={self._iface.mapCanvas().mapSettings().destinationCrs().authid()}",
                 self.resLayerName,
-                "memory"
+                "memory",
             )
         else:
-            if layers[0].providerType() == u"ogr":
-                self.resLayer = QgsVectorLayer(layers[0].source(), self.resLayerName, "ogr")
+            if layers[0].providerType() == "ogr":
+                self.resLayer = QgsVectorLayer(
+                    layers[0].source(), self.resLayerName, "ogr"
+                )
                 QgsProject.instance().removeMapLayers([layers[0].id()])
-            elif layers[0].providerType() == u"memory":
+            elif layers[0].providerType() == "memory":
                 QgsProject.instance().removeMapLayers([layers[0].id()])
                 self.resLayer = QgsVectorLayer(
                     f"{resType}?crs={self._iface.mapCanvas().mapSettings().destinationCrs().authid()}",
                     self.resLayerName,
-                    "memory"
+                    "memory",
                 )
 
         result = self.addFields(self.resLayer)
         if result is False:
             QgisPlugin(iface=self._iface).showMessageForUser(
-                self.tr(u"Layer with name '%s' can not be used for result output!") % self.resLayerName,
+                self.tr(
+                    "Layer with name '%s' can not be used for result output!"
+                )
+                % self.resLayerName,
                 Qgis.Warning,
-                0
+                0,
             )
             return
 
         self.applyResultStyle(self.resLayer)
 
-        progressDlg = QgsBusyIndicatorDialog(self.tr(u"Prepare"))
-        progressDlg.setWindowTitle(self.tr(u"Calculation"))
-        worker = Worker(plFrom, plTo, self.fIdFromName, self.fLinkName, self.fIdToName, self.resLayer)
+        progressDlg = QgsBusyIndicatorDialog(self.tr("Prepare"))
+        progressDlg.setWindowTitle(self.tr("Calculation"))
+        worker = Worker(
+            plFrom,
+            plTo,
+            self.fIdFromName,
+            self.fLinkName,
+            self.fIdToName,
+            self.resLayer,
+        )
         thread = QtCore.QThread(self._iface.mainWindow())
 
         worker.moveToThread(thread)
@@ -250,7 +305,7 @@ class ConnectPoints(QgisPlugin):
         worker.error.connect(progressDlg.close)
         worker.progressChanged.connect(
             lambda x, y: progressDlg.setMessage(
-                self.tr(u"Process %d points from %d") % (x, y)
+                self.tr("Process %d points from %d") % (x, y)
             )
         )
         thread.start()
@@ -262,10 +317,10 @@ class ConnectPoints(QgisPlugin):
 
     def addFields(self, qgsMapLayer):
         self.lineFields = [
-            QgsField(u"PNT1N", QtCore.QVariant.String),
-            QgsField(u"PNT2N", QtCore.QVariant.String),
-            QgsField(u"ID1", QtCore.QVariant.Int),
-            QgsField(u"ID2", QtCore.QVariant.Int),
+            QgsField("PNT1N", QtCore.QVariant.String),
+            QgsField("PNT2N", QtCore.QVariant.String),
+            QgsField("ID1", QtCore.QVariant.Int),
+            QgsField("ID2", QtCore.QVariant.Int),
         ]
         self.resLayer.startEditing()
 
@@ -288,9 +343,7 @@ class ConnectPoints(QgisPlugin):
         return True
 
     def applyResultStyle(self, qgsMapLayer):
-        qgsMapLayer.loadNamedStyle(
-            os.path.join(self.pluginDir, "style.qml")
-        )
+        qgsMapLayer.loadNamedStyle(os.path.join(self.pluginDir, "style.qml"))
 
         fi = QtCore.QFileInfo(qgsMapLayer.source())
 
@@ -298,10 +351,7 @@ class ConnectPoints(QgisPlugin):
             return
 
         qgsMapLayer.saveNamedStyle(
-            os.path.join(
-                fi.absolutePath(),
-                fi.baseName() + ".qml"
-            )
+            os.path.join(fi.absolutePath(), fi.baseName() + ".qml")
         )
 
     def addLayerToProject(self):
@@ -324,7 +374,8 @@ class ConnectPoints(QgisPlugin):
             QCoreApplication.installTranslator(translator)
             self._translator = translator  # Should be kept in memory
 
-        add_translator(path.join(
-            self.plugin_dir, 'i18n',
-            'connect_points_{}.qm'.format(locale)
-        ))
+        add_translator(
+            path.join(
+                self.plugin_dir, "i18n", "connect_points_{}.qm".format(locale)
+            )
+        )

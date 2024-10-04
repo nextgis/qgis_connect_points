@@ -52,10 +52,9 @@ class QgisPlugin(QgisPluginBase):
         self.__actions = []
 
         # initialize locale
-        locale = QtCore.QSettings().value('locale/userLocale')[0:2]
+        locale = QtCore.QSettings().value("locale/userLocale")[0:2]
         locale_path = os.path.join(
-            self.i18nPath,
-            '%s_%s.qm' % (self.normalizePluginName(), locale)
+            self.i18nPath, "%s_%s.qm" % (self.normalizePluginName(), locale)
         )
 
         if os.path.exists(locale_path):
@@ -73,21 +72,12 @@ class QgisPlugin(QgisPluginBase):
         #     )
 
     def plPrint(self, msg, level=Qgis.MessageLevel.Info):
-        QgsMessageLog.logMessage(
-            msg,
-            self._name,
-            level
-        )
+        QgsMessageLog.logMessage(msg, self._name, level)
 
     def showMessageForUser(self, msg, level=Qgis.MessageLevel.Info, timeout=2):
         message_bar = self._iface.messageBar()
         assert message_bar is not None
-        message_bar.pushMessage(
-            self._name,
-            msg,
-            level,
-            timeout
-        )
+        message_bar.pushMessage(self._name, msg, level, timeout)
 
     def addAction(self, name, iconSrc, addToToolBar=True, addToMenu=True):
         action = QAction(name, self._iface.mainWindow())

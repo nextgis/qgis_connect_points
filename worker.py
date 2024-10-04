@@ -1,4 +1,4 @@
-#******************************************************************************
+# ******************************************************************************
 #
 # Connect Points
 # ---------------------------------------------------------
@@ -23,7 +23,7 @@
 # to the Free Software Foundation, 51 Franklin Street, Suite 500 Boston,
 # MA 02110-1335 USA.
 #
-#******************************************************************************
+# ******************************************************************************
 
 from qgis.PyQt import QtCore
 
@@ -33,13 +33,11 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsProject,
     QgsVectorLayer,
-    QgsWkbTypes
+    QgsWkbTypes,
 )
 
 
-
 class Worker(QtCore.QObject):
-
     started = QtCore.pyqtSignal()
     stoped = QtCore.pyqtSignal()
     progressChanged = QtCore.pyqtSignal(int, int)
@@ -52,7 +50,7 @@ class Worker(QtCore.QObject):
         fIdFromName,
         fLinkName,
         fIdToName,
-        resLayer
+        resLayer,
     ) -> None:
         QtCore.QObject.__init__(self)
 
@@ -83,8 +81,12 @@ class Worker(QtCore.QObject):
 
             # print(f'{self.plFrom.crs()=}', f'{self.plTo.crs()=}')
 
-            from_transform = QgsCoordinateTransform(self.plFrom.crs(), self.resLayer.crs(), QgsProject.instance())
-            to_transform = QgsCoordinateTransform(self.plTo.crs(), self.resLayer.crs(), QgsProject.instance())
+            from_transform = QgsCoordinateTransform(
+                self.plFrom.crs(), self.resLayer.crs(), QgsProject.instance()
+            )
+            to_transform = QgsCoordinateTransform(
+                self.plTo.crs(), self.resLayer.crs(), QgsProject.instance()
+            )
 
             featureCounter = 0
             featureCount = self.plFrom.featureCount()
@@ -104,35 +106,35 @@ class Worker(QtCore.QObject):
                         point_from = from_geometry.vertexAt(0)
                         point_to = to_geometry.vertexAt(0)
 
-                        if (
-                            QgsWkbTypes.hasZ(point_to.wkbType())
-                            and not QgsWkbTypes.hasZ(point_from.wkbType())
-                        ):
+                        if QgsWkbTypes.hasZ(
+                            point_to.wkbType()
+                        ) and not QgsWkbTypes.hasZ(point_from.wkbType()):
                             point_from.addZValue()
 
-                        if (
-                            QgsWkbTypes.hasZ(point_from.wkbType())
-                            and not QgsWkbTypes.hasZ(point_to.wkbType())
-                        ):
+                        if QgsWkbTypes.hasZ(
+                            point_from.wkbType()
+                        ) and not QgsWkbTypes.hasZ(point_to.wkbType()):
                             point_to.addZValue()
 
                         lineFeature = QgsFeature()
                         lineFeature.setGeometry(
                             QgsGeometry.fromPolyline([point_from, point_to])
                         )
-                        lineFeature.setAttributes([
-                            self.plFrom.name(),
-                            self.plTo.name(),
-                            featureFrom.attribute(self.fIdFromName),
-                            primaryKey
-                        ])
+                        lineFeature.setAttributes(
+                            [
+                                self.plFrom.name(),
+                                self.plTo.name(),
+                                featureFrom.attribute(self.fIdFromName),
+                                primaryKey,
+                            ]
+                        )
 
                         provider.addFeatures([lineFeature])
 
                 featureCounter += 1
             self.stoped.emit()
         except KeyError as e:
-            self.error.emit(u"There is no attribute with name: " + str(e))
+            self.error.emit("There is no attribute with name: " + str(e))
         except Exception as e:
             self.error.emit(str(e))
         finally:
