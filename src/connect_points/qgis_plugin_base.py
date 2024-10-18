@@ -40,9 +40,7 @@ class Singleton(type):
         return cls._instances[Singleton]
 
 
-class QgisPluginBase:
-    __metaclass__ = Singleton
-
+class QgisPluginBase(metaclass=Singleton):
     def __init__(self):
         self.__plugin_dir = os.path.dirname(__file__)
         self.__readMeta()
