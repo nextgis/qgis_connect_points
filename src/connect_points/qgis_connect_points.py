@@ -104,7 +104,7 @@ class ConnectPoints(QgisPlugin):
 
     def about(self):
         dialog = about_dialog.AboutDialog(os.path.basename(self.plugin_dir))
-        dialog.exec_()
+        dialog.exec()
 
     def unload(self):
         self.delAllActions()
@@ -124,7 +124,7 @@ class ConnectPoints(QgisPlugin):
                 self._iface,
                 self._iface.mainWindow(),
             )
-            res = dlg.exec_()
+            res = dlg.exec()
             if res == Dialog.Accepted:
                 # QgisPlugin().plPrint("Save settings")
                 plugin_settings = dlg.getSettings()
@@ -313,7 +313,7 @@ class ConnectPoints(QgisPlugin):
         self.thread = thread
         self.worker = worker
 
-        progressDlg.exec_()
+        progressDlg.exec()
 
     def addFields(self, qgsMapLayer):
         self.lineFields = [

@@ -27,7 +27,7 @@
 # ******************************************************************************
 
 
-from PyQt5 import QtWidgets
+from qgis.PyQt import QtWidgets
 
 from qgis.core import (
     QgsProject,
