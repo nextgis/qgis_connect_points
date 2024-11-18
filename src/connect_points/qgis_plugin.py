@@ -27,8 +27,8 @@
 # *****************************************************************************
 import os
 
-from PyQt5 import QtGui
-from PyQt5 import QtCore
+from qgis.PyQt import QtGui
+from qgis.PyQt import QtCore
 
 from qgis.core import (
     QgsMessageLog,
