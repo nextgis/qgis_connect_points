@@ -4,54 +4,54 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../about_dialog.py" line="52"/>
+        <location filename="../about_dialog.py" line="61"/>
         <source> by NextGIS</source>
-        <translation type="unfinished"></translation>
+        <translation> от NextGIS</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="170"/>
+        <location filename="../about_dialog.py" line="201"/>
         <source>REPORT_END</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="175"/>
+        <location filename="../about_dialog.py" line="206"/>
         <source>Developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Разработчики</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="176"/>
+        <location filename="../about_dialog.py" line="207"/>
         <source>Homepage</source>
-        <translation type="unfinished"></translation>
+        <translation>Домашняя страница</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="177"/>
+        <location filename="../about_dialog.py" line="208"/>
         <source>Please report bugs at</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, сообщайте о багах в</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="179"/>
+        <location filename="../about_dialog.py" line="210"/>
         <source>bugtracker</source>
-        <translation type="unfinished"></translation>
+        <translation>багтрекер</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="180"/>
+        <location filename="../about_dialog.py" line="211"/>
         <source>Video with an overview of the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Видео с обзором на плагин</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="181"/>
+        <location filename="../about_dialog.py" line="212"/>
         <source>Other helpful services by NextGIS</source>
-        <translation type="unfinished"></translation>
+        <translation>Другие полезные сервисы от NextGIS</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="182"/>
+        <location filename="../about_dialog.py" line="213"/>
         <source>Convenient up-to-date data extracts for any place in the world</source>
-        <translation type="unfinished"></translation>
+        <translation>Удобная выборка актуальных данных из любой точки мира</translation>
     </message>
     <message>
-        <location filename="../about_dialog.py" line="185"/>
+        <location filename="../about_dialog.py" line="216"/>
         <source>Fully featured Web GIS service</source>
-        <translation type="unfinished"></translation>
+        <translation>Полнофункциональный Веб ГИС-сервис</translation>
     </message>
 </context>
 <context>
@@ -59,12 +59,12 @@
     <message>
         <location filename="../ui/about_dialog_base.ui" line="14"/>
         <source>About {plugin_name}</source>
-        <translation>О {plugin_name}</translation>
+        <translation>О модуле {plugin_name}</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="33"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="54"/>
@@ -73,37 +73,37 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="72"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензия</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="94"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Компоненты</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="116"/>
         <source>Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>Участники</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="158"/>
         <source>{plugin_name}</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="168"/>
         <source>Version {version}</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия {version}</translation>
     </message>
     <message>
         <location filename="../ui/about_dialog_base.ui" line="203"/>
-        <source>Support us</source>
-        <translation type="unfinished"></translation>
+        <source>Get involved</source>
+        <translation>Присоединяйтесь</translation>
     </message>
 </context>
 <context>
@@ -114,37 +114,37 @@ p, li { white-space: pre-wrap; }
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="242"/>
+        <location filename="../qgis_connect_points.py" line="253"/>
         <source>Layer with name &apos;%s&apos; not found!</source>
-        <translation>Слой с именем '%s' не найден!</translation>
+        <translation>Слой с именем &apos;%s&apos; не найден!</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="202"/>
+        <location filename="../qgis_connect_points.py" line="213"/>
         <source>Plugin settings are incorrect. Please, check settings!</source>
         <translation>Плагин настроен не корректно. Проверьте настройки!</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="272"/>
+        <location filename="../qgis_connect_points.py" line="283"/>
         <source>Layer with name &apos;%s&apos; can not be used for result output!</source>
-        <translation>Слой с именем '%s' не может быть использован для вывода результата!</translation>
+        <translation>Слой с именем &apos;%s&apos; не может быть использован для вывода результата!</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="284"/>
+        <location filename="../qgis_connect_points.py" line="295"/>
         <source>Prepare</source>
         <translation>Подготовка</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="285"/>
+        <location filename="../qgis_connect_points.py" line="296"/>
         <source>Calculation</source>
         <translation>Идёт расчет</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="306"/>
+        <location filename="../qgis_connect_points.py" line="317"/>
         <source>Process %d points from %d</source>
         <translation>Обработано %d точек из %d</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="242"/>
+        <location filename="../qgis_connect_points.py" line="253"/>
         <source>New layer is created!</source>
         <translation>Создан новый слой!</translation>
     </message>
@@ -154,7 +154,7 @@ p, li { white-space: pre-wrap; }
         <translation>Соединить точки</translation>
     </message>
     <message>
-        <location filename="../qgis_connect_points.py" line="158"/>
+        <location filename="../qgis_connect_points.py" line="169"/>
         <source>There are no available vector layers in layer tree!</source>
         <translation>В дереве слоев нет доступных векторных слоев!</translation>
     </message>
@@ -169,12 +169,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../dialog.py" line="70"/>
         <source>Point layer &apos;FROM&apos;</source>
-        <translation>Точечный слой 'ОТ'</translation>
+        <translation>Точечный слой &apos;ОТ&apos;</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="85"/>
         <source>Point layer &apos;TO&apos;</source>
-        <translation>Точечный слой 'К'</translation>
+        <translation>Точечный слой &apos;К&apos;</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="136"/>
@@ -184,7 +184,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../dialog.py" line="247"/>
         <source>Layer with name &apos;%s&apos; not found!</source>
-        <translation>Слой с именем '%s' не найден!</translation>
+        <translation>Слой с именем &apos;%s&apos; не найден!</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="271"/>
@@ -194,7 +194,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../dialog.py" line="100"/>
         <source>Point &apos;FROM&apos; id field</source>
-        <translation>Идентификатор точки 'ОТ'</translation>
+        <translation>Идентификатор точки &apos;ОТ&apos;</translation>
     </message>
     <message>
         <location filename="../dialog.py" line="112"/>
@@ -204,7 +204,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../dialog.py" line="124"/>
         <source>Point &apos;TO&apos; id field</source>
-        <translation>Идентификатор точки 'К'</translation>
+        <translation>Идентификатор точки &apos;К&apos;</translation>
     </message>
 </context>
 </TS>
