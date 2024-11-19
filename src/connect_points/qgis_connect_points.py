@@ -102,6 +102,17 @@ class ConnectPoints(QgisPlugin):
         m.addAction(actionAbout)
         self.toolButton.setDefaultAction(actionRun)
 
+        self.__show_help_action = QtWidgets.QAction(
+            QtGui.QIcon(self.pluginDir + "/icons/connect_points.svg"),
+            "Connect Points",
+        )
+
+        # add plugin to help menu
+        plugin_help_menu = self._iface.pluginHelpMenu()
+        assert plugin_help_menu is not None
+        plugin_help_menu.addAction(self.__show_help_action)
+        self.__show_help_action.triggered.connect(self.about)
+
     def about(self):
         dialog = about_dialog.AboutDialog(os.path.basename(self.plugin_dir))
         dialog.exec()
