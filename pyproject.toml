@@ -1,12 +1,12 @@
 [project]
 name = "connect_points"
-version = "0.4.1"
+version = "0.5.0"
 readme = "README.md"
 license = { file = "LICENSE" }
 
 
 [tool.qgspb.package-data]
-"connect_points.icons" = ["connect_points.svg", "settings.svg"]
+"connect_points.icons" = ["*.svg"]
 
 [tool.qgspb.forms]
 ui-files = ["src/connect_points/ui/*.ui"]
